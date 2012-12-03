@@ -1,6 +1,6 @@
 TODO:
 
-* Everybodty MUST add full comments for every method they code
+* Everybody MUST add full comments for every method they code
    - Except getters and setters of cause.
 
 Kudinov Alexander
@@ -8,7 +8,7 @@ Kudinov Alexander
 * Edit specifications
 * Add javadoc comments to sources from comments in specification
    - Abstraction function comments for each class from specification(lab4)
-   - Methods comments from specifiaction(lab4)
+   - Methods comments from specification(lab4)
 * Fill tables of database.
 
 Votyakov Roman
