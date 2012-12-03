@@ -1,7 +1,11 @@
 ﻿/*
- * Model: gibdd-system
- * Database: MySQL 5.5
- */
+Model: gibdd-system
+Database: MySQL 5.5
+*/
+
+-- Create tables section -------------------------------------------------
+
+-- Table humans
 
 CREATE TABLE humans
 (
@@ -22,7 +26,7 @@ CREATE TABLE insperctors
   login Varchar(20) NOT NULL,
   human_id Int UNSIGNED,
   post_id Int UNSIGNED,
-  raks_id Int UNSIGNED,
+  rank_id Int UNSIGNED,
  PRIMARY KEY (inspector_id),
  UNIQUE inspector_id (inspector_id)
 );
@@ -148,10 +152,10 @@ CREATE TABLE driver_licenses
 
 CREATE TABLE ranks
 (
-  raks_id Int UNSIGNED NOT NULL AUTO_INCREMENT,
+  rank_id Int UNSIGNED NOT NULL AUTO_INCREMENT,
   rank Varchar(50) NOT NULL,
- PRIMARY KEY (raks_id),
- UNIQUE rans_id (raks_id)
+ PRIMARY KEY (rank_id),
+ UNIQUE rans_id (rank_id)
 );
 
 -- Table posts
@@ -162,8 +166,7 @@ CREATE TABLE posts
   post Varchar(50) NOT NULL,
  PRIMARY KEY (post_id),
  UNIQUE post_id (post_id)
-)
-;
+);
 
 -- Table violations
 
@@ -197,9 +200,9 @@ CREATE TABLE duties
  UNIQUE duty_id (duty_id)
 );
 
-ALTER TABLE duties ADD PRIMARY KEY (duty_tour_id, duty_id);
+ALTER TABLE duties ADD PRIMARY KEY (duty_tour_id,duty_id);
 
--- Create relationships section -------------------------------------------------
+-- Create relationships section ------------------------------------------------- 
 
 ALTER TABLE insperctors ADD CONSTRAINT is_as FOREIGN KEY (human_id) REFERENCES humans (human_id) ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -217,7 +220,7 @@ ALTER TABLE driver_licenses ADD CONSTRAINT own FOREIGN KEY (human_id) REFERENCES
 
 ALTER TABLE insperctors ADD CONSTRAINT takes FOREIGN KEY (post_id) REFERENCES posts (post_id) ON DELETE RESTRICT ON UPDATE CASCADE;
 
-ALTER TABLE insperctors ADD CONSTRAINT is FOREIGN KEY (raks_id) REFERENCES ranks (raks_id) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE insperctors ADD CONSTRAINT is_as5 FOREIGN KEY (rank_id) REFERENCES ranks (rank_id) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 ALTER TABLE vehicle_registration_certificates ADD CONSTRAINT made_by FOREIGN KEY (vehicle_registration_certificate_inspector_id) REFERENCES vehicle_registration_certificate_inspectors (vehicle_registration_certificate_inspector_id) ON DELETE RESTRICT ON UPDATE CASCADE;
 
