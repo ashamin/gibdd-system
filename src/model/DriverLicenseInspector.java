@@ -76,8 +76,10 @@ public class DriverLicenseInspector extends Inspector {
 	 */
 	public DriverLicense createDriverLicense(Human human,
 			Date registrationDate, Date leaveDate, String categories) {
-		// TODO implement this operation
-		throw new UnsupportedOperationException("not implemented");
+		DriverLicense driverLicense = new DriverLicense(human, this,
+				registrationDate, leaveDate, categories);
+		driverLicense.insert();
+		return driverLicense;
 	}
 
 	/**
@@ -97,8 +99,12 @@ public class DriverLicenseInspector extends Inspector {
 	 */
 	public void updateDriverLicense(DriverLicense driverLicense, Human human,
 			Date registrationDate, Date leaveDate, String categories) {
-		// TODO implement this operation
-		throw new UnsupportedOperationException("not implemented");
+		driverLicense.setHuman(human);
+		driverLicense.setRegistrationDate(registrationDate);
+		driverLicense.setLeaveDate(leaveDate);
+		driverLicense.setCategories(categories);
+		driverLicense.setInspector(this);
+		driverLicense.update();
 	}
 
 	/**
@@ -107,8 +113,7 @@ public class DriverLicenseInspector extends Inspector {
 	 * @param driverLicense
 	 */
 	public void deleteDriverLicense(DriverLicense driverLicense) {
-		// TODO implement this operation
-		throw new UnsupportedOperationException("not implemented");
+		driverLicense.delete();
 	}
 
 	@Override

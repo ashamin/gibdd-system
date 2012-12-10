@@ -76,8 +76,10 @@ public class VehicleInspector extends Inspector {
 	public VehicleRegistrationCertificate createVehicleRegistrationCertificate(
 			Vehicle vehicle, Human human, String registrationNumber,
 			Date registrationDate, Date leaveDate) {
-		// TODO implement this operation
-		throw new UnsupportedOperationException("not implemented");
+		VehicleRegistrationCertificate vehicleRegistrationCertificate = new VehicleRegistrationCertificate(
+				vehicle, human, registrationNumber, registrationDate,
+				leaveDate, this);
+		return vehicleRegistrationCertificate;
 	}
 
 	/**
@@ -101,8 +103,14 @@ public class VehicleInspector extends Inspector {
 			VehicleRegistrationCertificate vehicleRegistrationCertificate,
 			Vehicle vehicle, Human human, String registrationNumber,
 			Date registrationDate, Date leaveDate) {
-		// TODO implement this operation
-		throw new UnsupportedOperationException("not implemented");
+		vehicleRegistrationCertificate.setHuman(human);
+		vehicleRegistrationCertificate.setLeaveDate(leaveDate);
+		vehicleRegistrationCertificate.setRegistrationDate(registrationDate);
+		vehicleRegistrationCertificate
+				.setRegistrationNumber(registrationNumber);
+		vehicleRegistrationCertificate.setVehicle(vehicle);
+		vehicleRegistrationCertificate.setVehicleInspector(this);
+		vehicleRegistrationCertificate.update();
 	}
 
 	/**
@@ -113,8 +121,7 @@ public class VehicleInspector extends Inspector {
 	 */
 	public void deleteVehicleRegistrationCertificate(
 			VehicleRegistrationCertificate vehicleRegistrationCertificate) {
-		// TODO implement this operation
-		throw new UnsupportedOperationException("not implemented");
+		vehicleRegistrationCertificate.delete();
 	}
 
 	@Override

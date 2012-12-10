@@ -126,10 +126,10 @@ public class AutomaticRecorder extends DBObject implements Runnable {
 	
 	/**
 	 * 
-	 * @param uID
+	 * @param UID
 	 */
-	public void setUID(String uID) {
-		UID = uID;
+	public void setUID(String UID) {
+		this.UID = UID;
 	}
 
 	/**

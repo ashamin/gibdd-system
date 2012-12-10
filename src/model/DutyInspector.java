@@ -95,8 +95,10 @@ public class DutyInspector extends Inspector {
 	 */
 	public DutyTour createDutyTour(Set<PatrolInspector> inspectors,
 			Set<AutomaticRecorder> recorders, Date startDate, Date finishDate) {
-		// TODO implement this operation
-		throw new UnsupportedOperationException("not implemented");
+		DutyTour dutyTour = new DutyTour(inspectors, recorders, this,
+				startDate, finishDate);
+		dutyTour.insert();
+		return dutyTour;
 	}
 
 	/**
@@ -107,27 +109,25 @@ public class DutyInspector extends Inspector {
 	 * начала наряда и дату окончания наряда.
 	 * 
 	 * @param dutyTour
-	 * @param inspectors
-	 * @param recorders
 	 * @param startDate
 	 * @param finishDate
 	 */
-	public void updateDutyTour(DutyTour dutyTour,
-			Set<PatrolInspector> inspectors, Set<AutomaticRecorder> recorders,
-			Date startDate, Date finishDate) {
-		// TODO implement this operation
-		throw new UnsupportedOperationException("not implemented");
+	public void updateDutyTour(DutyTour dutyTour, Date startDate,
+			Date finishDate) {
+		dutyTour.setDutyInspector(this);
+		dutyTour.setFinishDate(finishDate);
+		dutyTour.setStartDate(startDate);
+		dutyTour.update();
 	}
 
 	/**
 	 * Удаляет объект типа наряд. <br/>
 	 * В параметрах передается объект dutyTour, обозначающий наряд.
 	 * 
-	 * @return
+	 * @param dutyTour
 	 */
-	public DutyTour deleteDutyTour() {
-		// TODO implement this operation
-		throw new UnsupportedOperationException("not implemented");
+	public void deleteDutyTour(DutyTour dutyTour) {
+		dutyTour.delete();
 	}
 
 	@Override

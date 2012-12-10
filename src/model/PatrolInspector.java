@@ -32,12 +32,12 @@ public class PatrolInspector extends Inspector implements Runnable {
 	 * 
 	 */
 	private Queue<Protocol> queue;
-	
+
 	/**
 	 * 
 	 */
 	private boolean running;
-	
+
 	/**
 	 * Конструктор по умолчанию для класса PatrolInspector. <br/>
 	 * Создает экземпляр класса со стандартными значениями полей “ФИО”,
@@ -106,9 +106,12 @@ public class PatrolInspector extends Inspector implements Runnable {
 	 * @return
 	 */
 	public Protocol createProtocol(Human human, Violation violation, Date date,
-			String registrationNumber, Set<Violation> violations) {
-		// TODO implement this operation
-		throw new UnsupportedOperationException("not implemented");
+			Vehicle vehicle, String registrationNumber,
+			Set<Violation> violations) {
+		Protocol protocol = new Protocol(human, violation, date, vehicle,
+				violations, this);
+		protocol.insert();
+		return protocol;
 	}
 
 	/**
@@ -125,13 +128,16 @@ public class PatrolInspector extends Inspector implements Runnable {
 	 * @param violation
 	 * @param date
 	 * @param registrationNumber
-	 * @param violations
 	 */
 	public void updateProtocol(Protocol protocol, Human human,
-			Violation violation, Date date, String registrationNumber,
-			Set<Violation> violations) {
-		// TODO implement this operation
-		throw new UnsupportedOperationException("not implemented");
+			Violation violation, Date date, Vehicle vehicle,
+			String registrationNumber) {
+		protocol.setHuman(human);
+		protocol.setDate(date);
+		protocol.setViolation(violation);
+		protocol.setVehicle(vehicle);
+		protocol.setPatrolInspector(this);
+		protocol.update();
 	}
 
 	/**
@@ -142,8 +148,7 @@ public class PatrolInspector extends Inspector implements Runnable {
 	 * @param protocol
 	 */
 	public void deleteProtocol(Protocol protocol) {
-		// TODO implement this operation
-		throw new UnsupportedOperationException("not implemented");
+		protocol.delete();
 	}
 
 	@Override
@@ -222,7 +227,7 @@ public class PatrolInspector extends Inspector implements Runnable {
 	public EarthCoordinates getCoordinates() {
 		return this.coordinates;
 	}
-	
+
 	/**
 	 * 
 	 * @return
@@ -230,7 +235,7 @@ public class PatrolInspector extends Inspector implements Runnable {
 	public boolean isRunning() {
 		return running;
 	}
-	
+
 	/**
 	 * 
 	 * @param running

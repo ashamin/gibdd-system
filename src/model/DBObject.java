@@ -79,8 +79,10 @@ public abstract class DBObject {
 	 * @return
 	 */
 	public int getId() {
-		// TODO implement "lazy" initialization of id
-		throw new UnsupportedOperationException("not implemented");
+		if (this.id == UNDEFINED_ID) {
+			this.insert();
+		}
+		return this.id;
 	}
 
 }
