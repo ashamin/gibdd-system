@@ -1,12 +1,42 @@
-package model;
+﻿package model;
 
 /**
- * Класс автоматического регистратора правонарушений. <br/>
- * Содержит координаты регистратора. Объект класса генерирует нарушения, создает
- * на них протоколы и привязывает их к ближайшему патрульному. Является
- * наследником класса DBObject. Реализует добавление, удаление и исправление
- * указанных данных об автоматических регистраторах, а также представление
- * объекта в виде строки и поиск объекта по id.
+ * Класс автоматического регистратора правонарушений. Содержит координаты
+ * регистратора. Объект класса генерирует нарушения, создает на них протоколы и
+ * привязывает их к ближайшему патрульному. Является наследником класса
+ * DBObject. <br/>
+ * <br/>
+ * Функция абстракции <br/>
+ * <br/>
+ * Так как автоматический регистратор, является объектом, хранящимся в базе
+ * данных, в нашей системе, помимо основных свойств, присущих автоматическому
+ * регистратору, ему присвоен уникальный идентификатор или id. Этот id является
+ * полем базового класса DBObect. Инспектора, находящиеся в наряде, представлены
+ * множеством (Set) из объекта текущего наряда, информацию о котором хранит
+ * автоматический регистратор. Ближайший патрульный инспектор вычисляется в
+ * соответствии с координатами всех патрульных, которые могут быть получены как
+ * поле класса PatrolInspector (patrolInspector.coordinates) <br/>
+ * <br/>
+ * Класс AutomaticRecorder характеризуется следующими полями: id, coordinates,
+ * dutyTour <br/>
+ * <ul>
+ * <li>A(id) = Уникальный идентификатор</li>
+ * <li>A(coordinates) = Ссылка на координаты</li>
+ * <li>A(dutyTour.patrolInspectors<PatrolInspector>) = Ссылка на моножество
+ * инспекторов, находящихся в наряде dutyTour</li>
+ * </ul>
+ * <br/>
+ * <br/>
+ * Инвариант представления <br/>
+ * <ul>
+ * <li>id - неотрицательное целое число, уникальное в пределах таблицы БД</li>
+ * <li>coordinates - НЕ null</li>
+ * <li>dutyTour.patrolInspectors<PatrolInspector> - НЕ null</li>
+ * <li>для всех patrolInspector из dutyTour.patrolInspectors<PatrolInspector>
+ * patrolInspector.coordinates - НЕ null</li>
+ * </ul>
+ * <br/>
+ * <br/>
  * 
  * @author Вотяков Роман
  * @author Кудинов Александр
@@ -16,22 +46,22 @@ package model;
 public class AutomaticRecorder extends DBObject implements Runnable {
 
 	/**
-	 * 
+	 * Номер регистратора
 	 */
 	private String UID;
 
 	/**
-	 * 
+	 * Координаты
 	 */
 	private EarthCoordinates coordinates;
 
 	/**
-	 * 
+	 * Наряд
 	 */
 	private DutyTour dutyTour;
 
 	/**
-	 * 
+	 * Включен ли автоматический регистратор?
 	 */
 	private boolean running;
 
@@ -48,10 +78,8 @@ public class AutomaticRecorder extends DBObject implements Runnable {
 	}
 
 	/**
-	 * Создает объект типа автоматический регистратор. <br/>
-	 * В параметрах передаются: координаты авторегистратора и экземпляр класса
-	 * ''Наряд'', обозначающиеся соответственно: coordinates, dutyTour.
-	 *
+	 * Создает объект типа автоматический регистратор.
+	 * 
 	 * @param UID
 	 * @param coordinates
 	 * @param dutyTour
@@ -68,8 +96,7 @@ public class AutomaticRecorder extends DBObject implements Runnable {
 	/**
 	 * Конструктор копирования для класса AutomaticRecorder. <br/>
 	 * Создает копию объекта AutomaticRecorder(объект с идентичными значениями
-	 * параметров входного экземпляра класса AutomaticRecorder). Входным
-	 * параметром является объект класса AutomaticRecorder.
+	 * параметров входного экземпляра класса AutomaticRecorder).
 	 * 
 	 * @param recorder
 	 */
@@ -80,12 +107,29 @@ public class AutomaticRecorder extends DBObject implements Runnable {
 		this.running = recorder.running;
 	}
 
+	/**
+	 * Эмулирует регистрацию дорожно-транспортных нарушений. Метод в случайный
+	 * момент времени создает протокол.<br/>
+	 * <br/>
+	 * Данный метод вызывается, когда стартует Thread содержащий данный объект,
+	 * выполняется пока значение поля running равно true, и завершает свою
+	 * работу, когда значение поля running равно false.<br/>
+	 * <br/>
+	 * В случайный момент времени данный метод создает новый объект класса
+	 * Protocol, у которого задает поле registrationNumber (случайным образом),
+	 * поле date текущей датой, поле patrolInspector ближайшим патрульным
+	 * инспектором, который находится в наряде (dutyTour) в данный момент. Затем
+	 * протокол (Protocol) записывается в базу данных.
+	 */
 	@Override
 	public void run() {
 		// TODO implement generation of new protocols
 		throw new UnsupportedOperationException("not implemented");
 	}
 
+	/**
+	 * Переопределяются методы базового класса
+	 */
 	@Override
 	public void insert() {
 		// TODO implement database insert operation
@@ -115,16 +159,18 @@ public class AutomaticRecorder extends DBObject implements Runnable {
 		// TODO implement string representation of the object
 		throw new UnsupportedOperationException("not implemented");
 	}
-	
+
 	/**
+	 * Возвращает номер регистратора.
 	 * 
 	 * @return
 	 */
 	public String getUID() {
 		return UID;
 	}
-	
+
 	/**
+	 * Устанавливает номер регистратора.
 	 * 
 	 * @param UID
 	 */
@@ -133,9 +179,7 @@ public class AutomaticRecorder extends DBObject implements Runnable {
 	}
 
 	/**
-	 * Устанавливает координаты авторегистратора в параметрах. <br/>
-	 * Входящий параметр coordinates обозначает поле “Координаты
-	 * авторегистратора”.
+	 * Устанавливает координаты авторегистратора в параметрах.
 	 * 
 	 * @param coordinates
 	 */
@@ -153,8 +197,7 @@ public class AutomaticRecorder extends DBObject implements Runnable {
 	}
 
 	/**
-	 * Устанавливает наряд к которому привязан авторегистратор. <br/>
-	 * Входящий параметр dutyTour обозначает экземпляр класса “Наряд”.
+	 * Устанавливает наряд к которому привязан авторегистратор.
 	 * 
 	 * @param dutyTour
 	 */
@@ -172,6 +215,7 @@ public class AutomaticRecorder extends DBObject implements Runnable {
 	}
 
 	/**
+	 * Возвращает признак, включен ли регистратор.
 	 * 
 	 * @return
 	 */
@@ -180,6 +224,7 @@ public class AutomaticRecorder extends DBObject implements Runnable {
 	}
 
 	/**
+	 * Возвращает признак, включен ли регистратор.
 	 * 
 	 * @param running
 	 */

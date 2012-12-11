@@ -1,15 +1,45 @@
-package model;
+﻿package model;
 
 import java.util.Date;
 
 /**
- * Класс свидетельство о регистрации. <br/>
- * Содержит всю информацию о транспортном средстве с определенным
- * регистрационным номером, а также даты постановки транспортного средства на
- * регистрационный учет и его снятия. Является наследником класса DBObject.
- * Реализует добавление, удаление и исправление указанных данных в свидетельстве
- * о регистрации ТС, а также представление объекта в виде строки и поиск объекта
- * по id.
+ * VehicleRegistrationSertificate Класс свидетельство о регистрации. Содержит
+ * всю информацию о транспортном средстве, его владельце, а также даты
+ * постановки транспортного средства на регистрационный учет и его снятия.
+ * Является наследником класса DBObject. <br/>
+ * <br/>
+ * Функция абстракции <br/>
+ * <br/>
+ * Так как свидетельство о регистрации ТС, является объектом, хранящимся в базе
+ * данных, в нашей системе, помимо основных свойств, присущих свидетельству о
+ * регистрации, ему присвоен уникальный идентификатор или id. Этот id является
+ * полем базового класса DBObect. Информация о транспортном средстве и его
+ * владельце содержится в классе, как ссылки на объекты соответствующие
+ * транспортному средству и владельцу данного транспортного средства. <br/>
+ * <br/>
+ * Класс VehicleRegistrationSertificate характеризуется следующими полями: id,
+ * vehicle, human, registrationDate, leaveDate, vehicleInspector <br/>
+ * <ul>
+ * <li>A(id) = Уникальный идентификатор</li>
+ * <li>A(vehicle) = Ссылка на транспортное средство</li>
+ * <li>A(human) = Ссылка на человека</li>
+ * <li>A(registrationDate) = Дата регистрации</li>
+ * <li>A(leaveDate) = Дата снятия с учета</li>
+ * <li>A(vehicleInspector) = Ссылка на инспектора</li>
+ * </ul>
+ * <br/>
+ * <br/>
+ * Инвариант представления <br/>
+ * <ul>
+ * <li>id - неотрицательное целое число, уникальное в пределах таблицы БД</li>
+ * <li>vehicle - НЕ null</li>
+ * <li>human - НЕ null</li>
+ * <li>registrationDate - НЕ null</li>
+ * <li>leaveDate - НЕ null</li>
+ * <li>vehicleInspector - НЕ null</li>
+ * </ul>
+ * <br/>
+ * <br/>
  * 
  * @author Вотяков Роман
  * @author Кудинов Александр
@@ -19,39 +49,39 @@ import java.util.Date;
 public class VehicleRegistrationCertificate extends DBObject {
 
 	/**
-	 * 
+	 * Транспортное средство
 	 */
 	private Vehicle vehicle;
 
 	/**
-	 * 
+	 * Человек
 	 */
 	private Human human;
 
 	/**
-	 * 
+	 * Регистрационный номер
 	 */
 	private String registrationNumber;
 
 	/**
-	 * 
+	 * Дата регистрации
 	 */
 	private Date registrationDate;
 
 	/**
-	 * 
+	 * Дата снятия с учета
 	 */
 	private Date leaveDate;
 
 	/**
-	 * 
+	 * Инспектор
 	 */
 	private VehicleInspector vehicleInspector;
 
 	/**
 	 * Конструктор по умолчанию для класса VehicleRegistrationSertificate. <br/>
 	 * Создает экземпляр класса со стандартными значениями полей класса
-	 * ''Свидетельство о регистрации ТС''.
+	 * 'Свидетельство о регистрации ТС'.
 	 */
 	public VehicleRegistrationCertificate() {
 		this.vehicle = new Vehicle();
@@ -63,12 +93,7 @@ public class VehicleRegistrationCertificate extends DBObject {
 	}
 
 	/**
-	 * Создает объект типа "Свидетельство о регистрации ТС". <br/>
-	 * В параметрах передаются: параметры автомобиля, параметры владельца ТС,
-	 * регистрационный номер ТС, дата регистрации, дата окончания строка
-	 * регистрации, инспектор, зарегистрировавший ТС, обозначающиеся
-	 * соответственно: vehicle, human, registrationNumber, registrationDate,
-	 * leaveDate, vehicleInspector.
+	 * Создает объект типа "Свидетельство о регистрации ТС".
 	 * 
 	 * @param vehicle
 	 * @param human
@@ -92,8 +117,7 @@ public class VehicleRegistrationCertificate extends DBObject {
 	 * Конструктор копирования для класса VehicleRegistrationSertificate. <br/>
 	 * Создает копию объекта VehicleRegistrationSertificate(объект с идентичными
 	 * значениями параметров входного экземпляра класса
-	 * VehicleRegistrationSertificate). Входным параметром является объект
-	 * класса VehicleRegistrationSertificate.
+	 * VehicleRegistrationSertificate).
 	 * 
 	 * @param vehicleRegistrationCertificate
 	 */
@@ -107,6 +131,9 @@ public class VehicleRegistrationCertificate extends DBObject {
 		this.vehicleInspector = vehicleRegistrationCertificate.vehicleInspector;
 	}
 
+	/**
+	 * Переопределяются методы базового класса
+	 */
 	@Override
 	public void insert() {
 		// TODO implement database insert operation
@@ -138,9 +165,7 @@ public class VehicleRegistrationCertificate extends DBObject {
 	}
 
 	/**
-	 * Устанавливает регистрационный номер. <br/>
-	 * Входящий параметр registrationNumber обозначает поле “Регистрационный
-	 * номер ТС”.
+	 * Устанавливает регистрационный номер.
 	 * 
 	 * @param registrationNumber
 	 */
@@ -158,9 +183,7 @@ public class VehicleRegistrationCertificate extends DBObject {
 	}
 
 	/**
-	 * Устанавливает объект автомобиль, который соответствует данному
-	 * свидетельству о регистрации. <br/>
-	 * Входящий параметр vehicle обозначает поле “Транспортное средство”.
+	 * Устанавливает объект автомобиль.
 	 * 
 	 * @param vehicle
 	 */
@@ -169,8 +192,7 @@ public class VehicleRegistrationCertificate extends DBObject {
 	}
 
 	/**
-	 * Возвращает объект автомобиль, который соответствует данному свидетельству
-	 * о регистрации.
+	 * Возвращает объект автомобиль.
 	 * 
 	 * @return
 	 */
@@ -179,8 +201,7 @@ public class VehicleRegistrationCertificate extends DBObject {
 	}
 
 	/**
-	 * Устанавливает владельца транспортного средства. <br/>
-	 * Входящий параметр human обозначает поле “Владелец ТС”.
+	 * Устанавливает владельца транспортного средства.
 	 * 
 	 * @param human
 	 */
@@ -198,9 +219,7 @@ public class VehicleRegistrationCertificate extends DBObject {
 	}
 
 	/**
-	 * Устанавливает инспектора оформившего транспортное средство. <br/>
-	 * Входящий параметр vehicleInspector обозначает поле “Инспектор,
-	 * зарегистрировавший ТС”.
+	 * Устанавливает инспектора оформившего транспортное средство.
 	 * 
 	 * @param vehicleInspector
 	 */
@@ -227,8 +246,7 @@ public class VehicleRegistrationCertificate extends DBObject {
 	}
 
 	/**
-	 * Устанавливает дату регистрации ТС. <br/>
-	 * Входящий параметр date обозначает поле “Дата регистрации ТС”.
+	 * Устанавливает дату регистрации ТС.
 	 * 
 	 * @param registrationDate
 	 */
@@ -246,8 +264,7 @@ public class VehicleRegistrationCertificate extends DBObject {
 	}
 
 	/**
-	 * Устанавливает дату снятия с учета. <br/>
-	 * Входящий параметр date обозначает поле “Дата снятия ТС с учета”.
+	 * Устанавливает дату снятия с учета.
 	 * 
 	 * @param leaveDate
 	 */

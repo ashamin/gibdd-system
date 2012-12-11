@@ -1,12 +1,50 @@
-package model;
+﻿package model;
 
 import java.util.Date;
 
 /**
- * Класс описывает параметры инспектора, выдающего права. <br/>
- * Является наследником класса Inspector. Реализует добавление, удаление и
- * исправление указанных данных об инспекторе, регистрирующем ТС, а также
- * представление объекта в виде строки и поиск объекта по id.
+ * VehicleInspector Класс описывает параметры инспектора, выдающего права.
+ * Является наследником класса Inspector. <br/>
+ * <br/>
+ * Функция абстракции <br/>
+ * <br/>
+ * Так как инспектор оформляющий ТС, является объектом, хранящимся в базе
+ * данных, в нашей системе, помимо основных свойств, присущих инспектору
+ * оформляющий ТС, ему присвоен уникальный идентификатор или id. Этот id
+ * является полем базового класса DBObect. Класс VehicleInspector наследуется от
+ * класса Human. Таким образом объект инспектор, определяется в том числе и
+ * полями класса Human: name, passportNumber, address. Также класс
+ * VehicleInspector наследуется от класса Inspector. Таким образом объект
+ * инспектор, определяется в том числе и полями класса Inspector: rank, post,
+ * login, password <br/>
+ * <br/>
+ * Класс VehicleInspector характеризуется следующими полями: id, name,
+ * passportNumber, address, rank, post, login, password <br/>
+ * <ul>
+ * <li>A(id) = Уникальный идентификатор</li>
+ * <li>A(name) = ФИО</li>
+ * <li>A(passportNumber) = Номер паспорта</li>
+ * <li>A(address) = Адрес</li>
+ * <li>A(rank) = Звание</li>
+ * <li>A(post) = Должность</li>
+ * <li>A(login) = Логин</li>
+ * <li>A(password) = Пароль</li>
+ * </ul>
+ * <br/>
+ * <br/>
+ * Инвариант представления <br/>
+ * <ul>
+ * <li>id - неотрицательное целое число, уникальное в пределах таблицы БД</li>
+ * <li>name - НЕ null и не пустая строка</li>
+ * <li>passportNumber - НЕ null и не пустая строка</li>
+ * <li>Address - НЕ null</li>
+ * <li>rank - НЕ null и не пустая строка</li>
+ * <li>post - НЕ null и не пустая строка</li>
+ * <li>login - НЕ null и не пустая строка</li>
+ * <li>password - НЕ null и не пустая строка</li>
+ * </ul>
+ * <br/>
+ * <br/>
  * 
  * @author Вотяков Роман
  * @author Кудинов Александр
@@ -26,11 +64,7 @@ public class VehicleInspector extends Inspector {
 	}
 
 	/**
-	 * Создает экземпляр класса VehicleInspector. <br/>
-	 * Входными параметрами являются name, passportNumber, adress, rank, post,
-	 * login, password, обозначающими соответственно для данного объекта “ФИО”,
-	 * “Серия/номер паспорта”, “Адрес”, “Звание”, “Должность”, “Логин для входа
-	 * в систему”, “Пароль”.
+	 * Создает экземпляр класса VehicleInspector.
 	 * 
 	 * @param name
 	 * @param passportNumber
@@ -48,8 +82,7 @@ public class VehicleInspector extends Inspector {
 	/**
 	 * Конструктор копирования для класса VehicleInspector. <br/>
 	 * Создает копию объекта VehicleInspector(объект с идентичными значениями
-	 * параметров входного экземпляра класса VehicleInspector). Входным
-	 * параметром является объект класса VehicleInspector.
+	 * параметров входного экземпляра класса VehicleInspector).
 	 * 
 	 * @param inspector
 	 */
@@ -58,13 +91,10 @@ public class VehicleInspector extends Inspector {
 	}
 
 	/**
-	 * Заполняет объект типа свидетельство о регистрации транспортного средства
-	 * в соответствии с данными, указанными в параметрах и записывает информацию
-	 * о нем в базу данных. <br/>
-	 * Входными параметрами являются vehicle, human, registrationNumber,
-	 * registrationDate, leaveDate, обозначающими соответственно объект
-	 * ''Автомобиль'', объект ''Человек'', регистрационный номер, дату
-	 * регистрации, дату окончания регистрации.
+	 * Заполняет объект типа свидетельство о регистрации транспортного средства. <br/>
+	 * Метод создает объект класса VehicleRegistrationCertificate с заданными
+	 * параметрами, затем записывает его базу данных (вызывает метод insert() у
+	 * созданного объекта) и возвращает его.
 	 * 
 	 * @param vehicle
 	 * @param human
@@ -83,14 +113,11 @@ public class VehicleInspector extends Inspector {
 	}
 
 	/**
-	 * Изменяет объект типа свидетельство о регистрации транспортного средства в
-	 * соответствии с данными, указанными в параметрах и записывает информацию о
-	 * нем в базу данных. <br/>
-	 * Входными параметрами являются vehicleRegistrationSertificate, vehicle,
-	 * human, registrationNumber, registrationDate, leaveDate, обозначающими
-	 * соответственно свидетельство о регистрации, объект ''Автомобиль'', объект
-	 * ''Человек'', регистрационный номер, дату регистрации, дату окончания
-	 * регистрации.
+	 * Изменяет объект типа свидетельство о регистрации транспортного средства. <br/>
+	 * Метод изменяет значение полей объекта класса
+	 * VehicleRegistrationCertificate на соответствующие значения заданные в
+	 * параметрах, затем обновляет представление объекта в базе данных (вызывает
+	 * метод update() для заданного объекта).
 	 * 
 	 * @param vehicleRegistrationCertificate
 	 * @param vehicle
@@ -115,7 +142,9 @@ public class VehicleInspector extends Inspector {
 
 	/**
 	 * Удаляет объект типа свидетельство о регистрации транспортного средства из
-	 * базы данных.
+	 * БД. <br/>
+	 * Метод удаляет представление объекта класса VehicleRegistrationCertificate
+	 * из базы данных (вызывает метод delete() для заданного объекта).
 	 * 
 	 * @param vehicleRegistrationCertificate
 	 */
@@ -124,6 +153,9 @@ public class VehicleInspector extends Inspector {
 		vehicleRegistrationCertificate.delete();
 	}
 
+	/**
+	 * Переопределяются методы базового класса
+	 */
 	@Override
 	public void insert() {
 		// TODO implement database insert operation

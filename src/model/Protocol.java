@@ -1,13 +1,46 @@
-package model;
+﻿package model;
 
 import java.util.Date;
-import java.util.Set;
 
 /**
- * Класс протокол. <br/>
- * Содержит нарушения и дату их регистрации. Является наследником класса
- * DBObject. Реализует добавление, удаление и исправление указанных данных о
- * протоколе, а также представление объекта в виде строки и поиск объекта по id.
+ * Protocol Класс протокол. Содержит всю информацию о нарушении, человеке,
+ * совершившем нарушение, инспекторе, оформившем протокол, автомобиле и дате
+ * совершения нарушения. Является наследником класса DBObject. <br/>
+ * <br/>
+ * Функция абстракции <br/>
+ * <br/>
+ * Так как протокол, является объектом, хранящимся в базе данных, в нашей
+ * системе, помимо основных свойств, присущих протоколу, ему присвоен уникальный
+ * идентификатор или id. Этот id является полем базового класса DBObect.
+ * Информация о человеке, совершившем нарушение, патрульном инспекторе,
+ * нарушении и автомобиле содержится в классе, как ссылки на объекты
+ * соответствующие человеку, совершившему нарушение, патрульному инспектору,
+ * оформившему протокол, нарушению и автомобилю, на котором было совершено
+ * нарушение. <br/>
+ * <br/>
+ * Класс Protocol характеризуется следующими полями: id, human, violation, date,
+ * vehicle, patrolInspector. <br/>
+ * <ul>
+ * <li>A(id) = Уникальный идентификатор</li>
+ * <li>A(human) = Ссылка на человека</li>
+ * <li>A(violation) = Ссылка на нарушение</li>
+ * <li>A(date) = Ссылка на дату составления</li>
+ * <li>A(vehicle) = Ссылка на автомобиль</li>
+ * <li>A(patrolInspector) = Ссылка на инспектора</li>
+ * </ul>
+ * <br/>
+ * <br/>
+ * Инвариант представления <br/>
+ * <ul>
+ * <li>id - неотрицательное целое число, уникальное в пределах таблицы БД</li>
+ * <li>human - НЕ null</li>
+ * <li>violation - НЕ null</li>
+ * <li>date - НЕ null</li>
+ * <li>vehicle - НЕ null</li>
+ * <li>patrolInspector - НЕ null</li>
+ * </ul>
+ * <br/>
+ * <br/>
  * 
  * @author Вотяков Роман
  * @author Кудинов Александр
@@ -17,27 +50,27 @@ import java.util.Set;
 public class Protocol extends DBObject {
 
 	/**
-	 * 
+	 * Человек
 	 */
 	private Human human;
 
 	/**
-	 * 
+	 * Нарушение
 	 */
 	private Violation violation;
 
 	/**
-	 * 
+	 * Дата оформления протокола
 	 */
 	private Date date;
 
 	/**
-	 * 
+	 * Автомобиль
 	 */
 	private Vehicle velicle;
 
 	/**
-	 * 
+	 * Патрульный инспектор
 	 */
 	private PatrolInspector patrolInspector;
 
@@ -55,22 +88,16 @@ public class Protocol extends DBObject {
 	}
 
 	/**
-	 * Создает объект типа протокол. <br/>
-	 * В параметрах передаются: человек, совершивший нарушение, основное
-	 * нарушение, дата нарушения, регистрационный номер автомобиля, список
-	 * побочных нарушений, патрульный инспектор, обозначающиеся соответственно:
-	 * human, violation, date, registrationNumber, violations, patrolInspector.
+	 * Создает объект типа протокол.
 	 * 
 	 * @param human
 	 * @param violation
 	 * @param date
 	 * @param vehicle
-	 * @param violations
 	 * @param patrolInspector
 	 */
 	public Protocol(Human human, Violation violation, Date date,
-			Vehicle vehicle, Set<Violation> violations,
-			PatrolInspector patrolInspector) {
+			Vehicle vehicle, PatrolInspector patrolInspector) {
 		this.human = human;
 		this.violation = violation;
 		this.date = date;
@@ -81,8 +108,7 @@ public class Protocol extends DBObject {
 	/**
 	 * Конструктор копирования для класса Protocol. <br/>
 	 * Создает копию объекта Protocol(объект с идентичными значениями параметров
-	 * входного экземпляра класса Protocol). Входным параметром является объект
-	 * класса Protocol.
+	 * входного экземпляра класса Protocol).
 	 * 
 	 * @param protocol
 	 */
@@ -94,6 +120,9 @@ public class Protocol extends DBObject {
 		this.patrolInspector = protocol.patrolInspector;
 	}
 
+	/**
+	 * Переопределяются методы базового класса
+	 */
 	@Override
 	public void insert() {
 		// TODO implement database insert operation
@@ -125,9 +154,7 @@ public class Protocol extends DBObject {
 	}
 
 	/**
-	 * Устанавливает информацию о регистрационном номере автомобиля. <br/>
-	 * Входящий параметр registrationNumber обозначает поле “Регистрационный
-	 * номер ТС”.
+	 * Устанавливает информацию об автомобиле.
 	 * 
 	 * @param vehicle
 	 */
@@ -136,7 +163,7 @@ public class Protocol extends DBObject {
 	}
 
 	/**
-	 * Возвращает информацию о регистрационном номере автомобиля.
+	 * Возвращает информацию об автомобиле.
 	 * 
 	 * @return
 	 */
@@ -145,8 +172,7 @@ public class Protocol extends DBObject {
 	}
 
 	/**
-	 * Устанавливает тип нарушения, на основании которого составлен протокол. <br/>
-	 * Входящий параметр violation обозначает поле “Тип нарушение”.
+	 * Устанавливает тип нарушения.
 	 * 
 	 * @param violation
 	 */
@@ -155,7 +181,7 @@ public class Protocol extends DBObject {
 	}
 
 	/**
-	 * Возвращает тип нарушения, на основании которого составлен протокол.
+	 * Возвращает тип нарушения.
 	 * 
 	 * @return
 	 */
@@ -164,8 +190,7 @@ public class Protocol extends DBObject {
 	}
 
 	/**
-	 * Устанавливает информацию о нарушителе. <br/>
-	 * Входящий параметр human обозначает поле “Нарушитель”.
+	 * Устанавливает информацию о нарушителе.
 	 * 
 	 * @param human
 	 */
@@ -183,8 +208,7 @@ public class Protocol extends DBObject {
 	}
 
 	/**
-	 * Устанавливает информацию о патрульном инспекторе, заполнившем протокол. <br/>
-	 * Входящий параметр patrolInspector обозначает поле “Патрульный инспектор”.
+	 * Устанавливает информацию о патрульном инспекторе, заполнившем протокол.
 	 * 
 	 * @param patrolInspector
 	 */
@@ -202,7 +226,7 @@ public class Protocol extends DBObject {
 	}
 
 	/**
-	 * Возвращает время и дату составления протокола.
+	 * Возвращает дату составления протокола.
 	 * 
 	 * @return
 	 */
@@ -211,8 +235,7 @@ public class Protocol extends DBObject {
 	}
 
 	/**
-	 * Устанавливает дату составления протокола. <br/>
-	 * Входящий параметр date обозначает поле “Дата нарушения”.
+	 * Устанавливает дату составления протокола.
 	 * 
 	 * @param date
 	 */

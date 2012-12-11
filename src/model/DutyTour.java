@@ -1,15 +1,47 @@
-package model;
+﻿package model;
 
 import java.util.Date;
 import java.util.Set;
 import java.util.HashSet;
 
 /**
- * Класс наряд. <br/>
- * Содержит инспекторов в наряде, дату начала, дату конца и инспектора
- * составившего расписание наряда. Является наследником класса DBObject.
- * Реализует добавление, удаление и исправление указанных данных о нарядах, а
- * также представление объекта в виде строки и поиск объекта по id.
+ * Класс наряд. Класс наряд. Содержит инспекторов и автоматические регистраторы
+ * состоящие в наряде, дату начала, дату конца и инспектора составившего
+ * расписание наряда. Является наследником класса DBObject. <br/>
+ * <br/>
+ * Функция абстракции <br/>
+ * <br/>
+ * Так как наряд, является объектом, хранящимся в базе данных, в нашей системе,
+ * помимо основных свойств, присущих наряду, ему присвоен уникальный
+ * идентификатор или id. Этот id является полем базового класса DBObect.
+ * Информация о дежурном инспекторе, составившем наряд содержится в классе, как
+ * ссылка на объект соответствующий дежурному инспектору. Патрульные и
+ * автоматические регистраторы, заступившие в наряд должны быть представлены
+ * множествами (Set). <br/>
+ * <br/>
+ * Класс DutyTour характеризуется следующими полями: id, patrolInspectors,
+ * automaticRecorders, dutyInspector, startDate, finishDate <br/>
+ * <ul>
+ * <li>A(id) = Уникальный идентификатор</li>
+ * <li>A(patrolInspectors) = Ссылка на множество патрульных инспекторов</li>
+ * <li>A(automaticRecorders) = Ссылка на множество автоматических регистраторов</li>
+ * <li>A(dutyInspector) = Ссылка на дежурного инспектора</li>
+ * <li>A(startDate) = Начало наряда</li>
+ * <li>A(finishDate) = Завершение наряда</li>
+ * </ul>
+ * <br/>
+ * <br/>
+ * Инвариант представления <br/>
+ * <ul>
+ * <li>id - неотрицательное целое число, уникальное в пределах таблицы БД</li>
+ * <li>patrolInspectors - НЕ null и не пустое множество</li>
+ * <li>AutomaticRecorders - НЕ null и не пустое множество</li>
+ * <li>dutyInspector - НЕ null</li>
+ * <li>startDate - НЕ null</li>
+ * <li>finishDate - НЕ null</li>
+ * </ul>
+ * <br/>
+ * <br/>
  * 
  * @author Вотяков Роман
  * @author Кудинов Александр
@@ -19,27 +51,27 @@ import java.util.HashSet;
 public class DutyTour extends DBObject {
 
 	/**
-	 * 
+	 * Множество патрульных инспекторов
 	 */
 	private Set<PatrolInspector> patrolInspectors;
 
 	/**
-	 * 
+	 * Множество автоматических регистраторов
 	 */
 	private Set<AutomaticRecorder> automaticRecorders;
 
 	/**
-	 * 
+	 * Дежурный инспектор
 	 */
 	private DutyInspector dutyInspector;
 
 	/**
-	 * 
+	 * Начало наряда
 	 */
 	private Date startDate;
 
 	/**
-	 * 
+	 * Завершение наряда
 	 */
 	private Date finishDate;
 
@@ -58,11 +90,7 @@ public class DutyTour extends DBObject {
 	}
 
 	/**
-	 * Создает объект типа наряд. <br/>
-	 * В параметрах передаются: список патрульных инспекторов, список
-	 * автоматических регистраторов, инспектор, составивший наряд, дата начала
-	 * наряда, дата его окончания, обозначающиеся соответственно: inspectors,
-	 * recorders, inspector, startDate, finishDate.
+	 * Создает объект типа наряд.
 	 * 
 	 * @param patrolInspectors
 	 * @param recorders
@@ -83,8 +111,7 @@ public class DutyTour extends DBObject {
 	/**
 	 * Конструктор копирования для класса DutyTour. <br/>
 	 * Создает копию объекта DutyTour(объект с идентичными значениями параметров
-	 * входного экземпляра класса DutyTour). Входным параметром является объект
-	 * класса DutyTour.
+	 * входного экземпляра класса DutyTour).
 	 * 
 	 * @param dutyTour
 	 */
@@ -96,6 +123,9 @@ public class DutyTour extends DBObject {
 		this.finishDate = dutyTour.finishDate;
 	}
 
+	/**
+	 * Переопределяются методы базового класса
+	 */
 	@Override
 	public void insert() {
 		// TODO implement database insert operation
@@ -151,8 +181,7 @@ public class DutyTour extends DBObject {
 	}
 
 	/**
-	 * Устанавливает инспектора составившего расписание наряда. <br/>
-	 * Входящий параметр inspector обозначает поле “Дежурный инспектор”.
+	 * Устанавливает инспектора составившего расписание наряда.
 	 * 
 	 * @param dutyInspector
 	 */
@@ -179,8 +208,7 @@ public class DutyTour extends DBObject {
 	}
 
 	/**
-	 * Устанавливает дату начала наряда. <br/>
-	 * Входящий параметр startDate обозначает поле “Дата начала наряда”.
+	 * Устанавливает дату начала наряда.
 	 * 
 	 * @param startDate
 	 */
@@ -198,8 +226,7 @@ public class DutyTour extends DBObject {
 	}
 
 	/**
-	 * Устанавливает дату окончания наряда. <br/>
-	 * Входящий параметр finishDate обозначает поле “Дата окончания наряда”.
+	 * Устанавливает дату окончания наряда.
 	 * 
 	 * @param finishDate
 	 */
