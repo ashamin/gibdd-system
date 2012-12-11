@@ -3,6 +3,19 @@ Model: gibdd-system
 Database: MySQL 5.5
 */
 
+-- Create database -------------------------------------------------
+
+create database gibdd_system;
+use gibdd_system;
+
+-- Create users section -------------------------------------------------
+
+-- Common user
+
+create user gibddadmin identified by 'gibddadmin'; 
+grant usage on *.* to gibddadmin@localhost identified by 'Inc54rE34dibl1eHa3rdCoR54ePas3sw65OR12d'; 
+grant all privileges on gibddsystem.* to gibddadmin@localhost;
+
 -- Create tables section -------------------------------------------------
 
 -- Table humans
