@@ -108,7 +108,7 @@ public class Human extends DBObject {
 			try {
 				PreparedStatement stmt = conn
 						.prepareStatement(
-								"insert into gibdd_system_bd.humans values (default, ?, ?, ?)",
+								"insert into gibdd_system_db.humans values (default, ?, ?, ?)",
 								Statement.RETURN_GENERATED_KEYS);
 				stmt.setString(1, this.name);
 				stmt.setString(2, this.passportNumber);
@@ -142,7 +142,7 @@ public class Human extends DBObject {
 			Connection conn = this.getConnection();
 			try {
 				PreparedStatement stmt = conn
-						.prepareStatement("update gibdd_system_bd.humans set"
+						.prepareStatement("update gibdd_system_db.humans set"
 								+ " name=?," + " passport_number=?, "
 								+ "address=? where human_id = "
 								+ Integer.toString(this.id));
@@ -173,7 +173,7 @@ public class Human extends DBObject {
 			Connection conn = this.getConnection();
 			try{
 			PreparedStatement stmt = conn
-					.prepareStatement("delete from gibdd_system_bd.humans where human_id = "
+					.prepareStatement("delete from gibdd_system_db.humans where human_id = "
 							+ Integer.toString(this.id));
 			stmt.executeUpdate();
 
@@ -197,7 +197,7 @@ public class Human extends DBObject {
 			try{
 			PreparedStatement stmt = conn
 					.prepareStatement("select human_id, name, passport_number, address"
-							+ " from gibdd_system_bd.humans where human_id = "
+							+ " from gibdd_system_db.humans where human_id = "
 							+ Integer.toString(this.id));
 			ResultSet res = stmt.executeQuery();
 

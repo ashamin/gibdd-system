@@ -1,7 +1,7 @@
 /*
- * Model: gibdd-system
- * Database: MySQL 5.5
- */
+* Model: gibdd-system
+* Database: MySQL 5.5
+*/
 
 -- Create users section --------------------------------------------------
 
