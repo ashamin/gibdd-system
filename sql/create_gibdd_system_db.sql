@@ -33,7 +33,8 @@ CREATE TABLE insperctors
   post_id Int UNSIGNED,
   rank_id Int UNSIGNED,
  PRIMARY KEY (inspector_id),
- UNIQUE inspector_id (inspector_id)
+ UNIQUE inspector_id (inspector_id),
+ UNIQUE login (login)
 );
 
 -- Table automatic_registrators
