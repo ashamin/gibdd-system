@@ -131,7 +131,7 @@ CREATE TABLE vehicles
 CREATE TABLE vehicle_registration_certificates
 (
   vehicle_registration_certificate_id Int UNSIGNED NOT NULL AUTO_INCREMENT,
-  leave_date Date NOT NULL,
+  leave_date Date,
   registration_date Date NOT NULL,
   registration_number Char(20) NOT NULL,
   vehicle_registration_certificate_inspector_id Int UNSIGNED,
