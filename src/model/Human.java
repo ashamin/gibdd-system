@@ -1,5 +1,10 @@
 ﻿package model;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
 /**
  * Human Класс, включающий основные свойства, присущие всем участникам дорожного
  * движения. Содержит информацию о ФИО, серии/номере паспорта, адресе человека.
@@ -87,7 +92,7 @@ public class Human extends DBObject {
 	 * @param human
 	 */
 	public Human(Human human) {
-		super();
+		this.id = human.id;
 		this.name = human.name;
 		this.passportNumber = human.passportNumber;
 		this.address = human.address;
@@ -98,32 +103,133 @@ public class Human extends DBObject {
 	 */
 	@Override
 	public void insert() {
-		// TODO implement database insert operation
-		throw new UnsupportedOperationException("not implemented");
+		try {
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement(
+								"insert into gibdd_system_bd.humans values (default, ?, ?, ?)",
+								Statement.RETURN_GENERATED_KEYS);
+				stmt.setString(1, this.name);
+				stmt.setString(2, this.passportNumber);
+				stmt.setString(3, this.address);
+				stmt.executeUpdate();
+
+				ResultSet key = stmt.getGeneratedKeys();
+				key.next();
+				this.id = key.getInt(1);
+
+				System.out.println("...Row with string representation \n\t"
+						+ this.toString() + "\nwas added");
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void update() {
-		// TODO implement database update operation
-		throw new UnsupportedOperationException("not implemented");
+		try {
+			Human tmp = new Human(this);
+			tmp.select(this.id);
+			String oldRepr = tmp.toString();
+
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("update gibdd_system_bd.humans set"
+								+ " name=?," + " passport_number=?, "
+								+ "address=? where human_id = "
+								+ Integer.toString(this.id));
+				stmt.setString(1, this.name);
+				stmt.setString(2, this.passportNumber);
+				stmt.setString(3, this.address);
+				stmt.executeUpdate();
+
+				System.out
+						.println("...Row in base with string representation \n\t"
+								+ oldRepr
+								+ "\nwas updated to\n\t"
+								+ this.toString());
+			} catch (Exception e) {
+
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void delete() {
-		// TODO implement database delete operation
-		throw new UnsupportedOperationException("not implemented");
+		try {
+			Connection conn = this.getConnection();
+			try{
+			PreparedStatement stmt = conn
+					.prepareStatement("delete from gibdd_system_bd.humans where human_id = "
+							+ Integer.toString(this.id));
+			stmt.executeUpdate();
+
+			System.out.println("...Row with string representation \n\t"
+					+ this.toString() + "\nwas deleted from base");
+			}catch(Exception e){
+				e.printStackTrace();
+			}finally{
+				conn.close();	
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void select(int id) {
-		// TODO implement database select operation
-		throw new UnsupportedOperationException("not implemented");
+		try {
+			Connection conn = this.getConnection();
+			try{
+			PreparedStatement stmt = conn
+					.prepareStatement("select human_id, name, passport_number, address"
+							+ " from gibdd_system_bd.humans where human_id = "
+							+ Integer.toString(this.id));
+			ResultSet res = stmt.executeQuery();
+
+			while (res.next()) {
+				this.id = res.getInt(1);
+				this.name = res.getString(2);
+				this.passportNumber = res.getString(3);
+				this.address = res.getString(4);
+			}
+
+			System.out.println("...Row with string representation \n\t"
+					+ this.toString() + "\nwas selected from base");
+			
+			}catch(Exception e){
+				e.printStackTrace();
+			}finally{
+				conn.close();	
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public String toString() {
-		// TODO implement string representation of the object
-		throw new UnsupportedOperationException("not implemented");
+		StringBuilder ret = new StringBuilder();
+		ret.append("id = " + Integer.toString(this.id) + ", ");
+		ret.append("name = " + this.name + ", ");
+		ret.append("passportNumber = " + this.passportNumber + ", ");
+		ret.append("address = " + this.address);
+		return ret.toString();
 	}
 
 	/**

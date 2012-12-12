@@ -1,5 +1,12 @@
 ﻿package model;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 /**
  * DBObject Характеризует объект, который может быть записан в базу данных.
  * Определяет операции добавления его в базу, изменения, удаления а также
@@ -93,6 +100,21 @@ public abstract class DBObject {
 			this.insert();
 		}
 		return this.id;
+	}
+
+	/**
+	 * Возвращает соединение к базе данных через пул.
+	 * 
+	 * @return соединение
+	 * 
+	 * @throws NamingException
+	 * @throws SQLException
+	 */
+	public Connection getConnection() throws NamingException, SQLException {
+		InitialContext context = new InitialContext();
+		DataSource dataSource = (DataSource) context
+				.lookup("java:comp/env/gibdd-system");
+		return dataSource.getConnection();
 	}
 
 }
