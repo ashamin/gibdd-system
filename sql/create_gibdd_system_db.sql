@@ -1,20 +1,12 @@
 ﻿/*
-Model: gibdd-system
-Database: MySQL 5.5
-*/
+ * Model: gibdd-system
+ * Database: MySQL 5.5
+ */
 
--- Create database -------------------------------------------------
+-- Create database section -----------------------------------------------
 
-create database gibdd_system;
-use gibdd_system;
-
--- Create users section -------------------------------------------------
-
--- Common user
-
-create user gibddadmin identified by 'gibddadmin'; 
-grant usage on *.* to gibddadmin@localhost identified by 'Inc54rE34dibl1eHa3rdCoR54ePas3sw65OR12d'; 
-grant all privileges on gibddsystem.* to gibddadmin@localhost;
+CREATE DATABASE gibdd_system_db;
+USE gibdd_system_db;
 
 -- Create tables section -------------------------------------------------
 
@@ -41,7 +33,8 @@ CREATE TABLE insperctors
   post_id Int UNSIGNED,
   rank_id Int UNSIGNED,
  PRIMARY KEY (inspector_id),
- UNIQUE inspector_id (inspector_id)
+ UNIQUE inspector_id (inspector_id),
+ UNIQUE login (login)
 );
 
 -- Table automatic_registrators
@@ -215,7 +208,7 @@ CREATE TABLE duties
 
 ALTER TABLE duties ADD PRIMARY KEY (duty_tour_id,duty_id);
 
--- Create relationships section ------------------------------------------------- 
+-- Create relationships section -------------------------------------------------
 
 ALTER TABLE insperctors ADD CONSTRAINT is_as FOREIGN KEY (human_id) REFERENCES humans (human_id) ON DELETE RESTRICT ON UPDATE CASCADE;
 
