@@ -104,12 +104,12 @@ CREATE TABLE driver_license_inspectors
 
 -- Table vehicle_registration_certificate_inspectors
 
-CREATE TABLE vehicle_registration_certificate_inspectors
+CREATE TABLE vehicle_inspectors
 (
-  vehicle_registration_certificate_inspector_id Int UNSIGNED NOT NULL AUTO_INCREMENT,
+  vehicle_inspector_id Int UNSIGNED NOT NULL AUTO_INCREMENT,
   inspector_id Int UNSIGNED,
- PRIMARY KEY (vehicle_registration_certificate_inspector_id),
- UNIQUE vehicle_registration_certificate_inspector_id (vehicle_registration_certificate_inspector_id)
+ PRIMARY KEY (vehicle_inspector_id),
+ UNIQUE vehicle_inspector_id (vehicle_inspector_id)
 );
 
 -- Table vehicles
@@ -218,7 +218,7 @@ ALTER TABLE patrol_inspectors ADD CONSTRAINT is_as1 FOREIGN KEY (inspector_id) R
 
 ALTER TABLE duty_inspectors ADD CONSTRAINT is_as2 FOREIGN KEY (inspector_id) REFERENCES insperctors (inspector_id) ON DELETE RESTRICT ON UPDATE CASCADE;
 
-ALTER TABLE vehicle_registration_certificate_inspectors ADD CONSTRAINT is_as3 FOREIGN KEY (inspector_id) REFERENCES insperctors (inspector_id) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE vehicle_inspectors ADD CONSTRAINT is_as3 FOREIGN KEY (inspector_id) REFERENCES insperctors (inspector_id) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 ALTER TABLE driver_licenses ADD CONSTRAINT give FOREIGN KEY (driver_license_inspector_id) REFERENCES driver_license_inspectors (driver_license_inspector_id) ON DELETE RESTRICT ON UPDATE CASCADE;
 
