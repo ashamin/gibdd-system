@@ -22,9 +22,9 @@ CREATE TABLE humans
  UNIQUE human_id (human_id)
 );
 
--- Table insperctors
+-- Table inspectors
 
-CREATE TABLE insperctors
+CREATE TABLE inspectors
 (
   inspector_id Int UNSIGNED NOT NULL AUTO_INCREMENT,
   password Varchar(20) NOT NULL,
@@ -37,14 +37,14 @@ CREATE TABLE insperctors
  UNIQUE login (login)
 );
 
--- Table automatic_registrators
+-- Table automatic_recorders
 
-CREATE TABLE automatic_registrators
+CREATE TABLE automatic_recorders
 (
-  automatic_registrator_id Int UNSIGNED NOT NULL AUTO_INCREMENT,
+  automatic_recorder_id Int UNSIGNED NOT NULL AUTO_INCREMENT,
   UID Varchar(10) NOT NULL,
- PRIMARY KEY (automatic_registrator_id),
- UNIQUE automatic_registrator_id (automatic_registrator_id)
+ PRIMARY KEY (automatic_recorder_id),
+ UNIQUE automatic_recorder_id (automatic_recorder_id)
 );
 
 -- Table protocols
@@ -134,7 +134,7 @@ CREATE TABLE vehicle_registration_certificates
   leave_date Date,
   registration_date Date NOT NULL,
   registration_number Char(20) NOT NULL,
-  vehicle_registration_certificate_inspector_id Int UNSIGNED,
+  vehicle_inspector_id Int UNSIGNED,
   vehicle_id Int UNSIGNED,
  PRIMARY KEY (vehicle_registration_certificate_id),
  UNIQUE vehicle_registration_certificate_id (vehicle_registration_certificate_id)
@@ -210,25 +210,25 @@ ALTER TABLE duties ADD PRIMARY KEY (duty_tour_id,duty_id);
 
 -- Create relationships section -------------------------------------------------
 
-ALTER TABLE insperctors ADD CONSTRAINT is_as FOREIGN KEY (human_id) REFERENCES humans (human_id) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE inspectors ADD CONSTRAINT is_as FOREIGN KEY (human_id) REFERENCES humans (human_id) ON DELETE RESTRICT ON UPDATE CASCADE;
 
-ALTER TABLE driver_license_inspectors ADD CONSTRAINT is_as4 FOREIGN KEY (inspector_id) REFERENCES insperctors (inspector_id) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE driver_license_inspectors ADD CONSTRAINT is_as4 FOREIGN KEY (inspector_id) REFERENCES inspectors (inspector_id) ON DELETE RESTRICT ON UPDATE CASCADE;
 
-ALTER TABLE patrol_inspectors ADD CONSTRAINT is_as1 FOREIGN KEY (inspector_id) REFERENCES insperctors (inspector_id) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE patrol_inspectors ADD CONSTRAINT is_as1 FOREIGN KEY (inspector_id) REFERENCES inspectors (inspector_id) ON DELETE RESTRICT ON UPDATE CASCADE;
 
-ALTER TABLE duty_inspectors ADD CONSTRAINT is_as2 FOREIGN KEY (inspector_id) REFERENCES insperctors (inspector_id) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE duty_inspectors ADD CONSTRAINT is_as2 FOREIGN KEY (inspector_id) REFERENCES inspectors (inspector_id) ON DELETE RESTRICT ON UPDATE CASCADE;
 
-ALTER TABLE vehicle_inspectors ADD CONSTRAINT is_as3 FOREIGN KEY (inspector_id) REFERENCES insperctors (inspector_id) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE vehicle_inspectors ADD CONSTRAINT is_as3 FOREIGN KEY (inspector_id) REFERENCES inspectors (inspector_id) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 ALTER TABLE driver_licenses ADD CONSTRAINT give FOREIGN KEY (driver_license_inspector_id) REFERENCES driver_license_inspectors (driver_license_inspector_id) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 ALTER TABLE driver_licenses ADD CONSTRAINT own FOREIGN KEY (human_id) REFERENCES humans (human_id) ON DELETE RESTRICT ON UPDATE CASCADE;
 
-ALTER TABLE insperctors ADD CONSTRAINT takes FOREIGN KEY (post_id) REFERENCES posts (post_id) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE inspectors ADD CONSTRAINT takes FOREIGN KEY (post_id) REFERENCES posts (post_id) ON DELETE RESTRICT ON UPDATE CASCADE;
 
-ALTER TABLE insperctors ADD CONSTRAINT is_as5 FOREIGN KEY (rank_id) REFERENCES ranks (rank_id) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE inspectors ADD CONSTRAINT is_as5 FOREIGN KEY (rank_id) REFERENCES ranks (rank_id) ON DELETE RESTRICT ON UPDATE CASCADE;
 
-ALTER TABLE vehicle_registration_certificates ADD CONSTRAINT made_by FOREIGN KEY (vehicle_registration_certificate_inspector_id) REFERENCES vehicle_registration_certificate_inspectors (vehicle_registration_certificate_inspector_id) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE vehicle_registration_certificates ADD CONSTRAINT made_by FOREIGN KEY (vehicle_inspector_id) REFERENCES vehicle_inspectors (vehicle_inspector_id) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 ALTER TABLE vehicle_registration_certificates ADD CONSTRAINT have_inf FOREIGN KEY (vehicle_id) REFERENCES vehicles (vehicle_id) ON DELETE RESTRICT ON UPDATE CASCADE;
 

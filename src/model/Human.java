@@ -171,18 +171,18 @@ public class Human extends DBObject {
 	public void delete() {
 		try {
 			Connection conn = this.getConnection();
-			try{
-			PreparedStatement stmt = conn
-					.prepareStatement("delete from gibdd_system_db.humans where human_id = "
-							+ Integer.toString(this.id));
-			stmt.executeUpdate();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("delete from gibdd_system_db.humans where human_id = "
+								+ Integer.toString(this.id));
+				stmt.executeUpdate();
 
-			System.out.println("...Row with string representation \n\t"
-					+ this.toString() + "\nwas deleted from base");
-			}catch(Exception e){
+				System.out.println("...Row with string representation \n\t"
+						+ this.toString() + "\nwas deleted from base");
+			} catch (Exception e) {
 				e.printStackTrace();
-			}finally{
-				conn.close();	
+			} finally {
+				conn.close();
 			}
 
 		} catch (Exception e) {
@@ -194,27 +194,27 @@ public class Human extends DBObject {
 	public void select(int id) {
 		try {
 			Connection conn = this.getConnection();
-			try{
-			PreparedStatement stmt = conn
-					.prepareStatement("select human_id, name, passport_number, address"
-							+ " from gibdd_system_db.humans where human_id = "
-							+ Integer.toString(this.id));
-			ResultSet res = stmt.executeQuery();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("select human_id, name, passport_number, address"
+								+ " from gibdd_system_db.humans where human_id = "
+								+ Integer.toString(this.id));
+				ResultSet res = stmt.executeQuery();
 
-			while (res.next()) {
-				this.id = res.getInt(1);
-				this.name = res.getString(2);
-				this.passportNumber = res.getString(3);
-				this.address = res.getString(4);
-			}
+				while (res.next()) {
+					this.id = res.getInt(1);
+					this.name = res.getString(2);
+					this.passportNumber = res.getString(3);
+					this.address = res.getString(4);
+				}
 
-			System.out.println("...Row with string representation \n\t"
-					+ this.toString() + "\nwas selected from base");
-			
-			}catch(Exception e){
+				System.out.println("...Row with string representation \n\t"
+						+ this.toString() + "\nwas selected from base");
+
+			} catch (Exception e) {
 				e.printStackTrace();
-			}finally{
-				conn.close();	
+			} finally {
+				conn.close();
 			}
 
 		} catch (Exception e) {
