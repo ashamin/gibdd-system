@@ -161,7 +161,8 @@ CREATE TABLE ranks
   rank_id Int UNSIGNED NOT NULL AUTO_INCREMENT,
   rank Varchar(50) NOT NULL,
  PRIMARY KEY (rank_id),
- UNIQUE rans_id (rank_id)
+ UNIQUE rans_id (rank_id),
+ UNIQUE rank (rank)
 );
 
 -- Table posts
@@ -171,7 +172,8 @@ CREATE TABLE posts
   post_id Int UNSIGNED NOT NULL AUTO_INCREMENT,
   post Varchar(50) NOT NULL,
  PRIMARY KEY (post_id),
- UNIQUE post_id (post_id)
+ UNIQUE post_id (post_id),
+ UNIQUE post (post)
 );
 
 -- Table violations
