@@ -2,6 +2,7 @@
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Date;
 import java.util.LinkedList;
@@ -269,7 +270,56 @@ public class PatrolInspector extends Inspector implements Runnable {
 	public void select(int id) {
 		super.select(id);
 	}
+	
+	@Override
+	public void select(String login, String password) {
+		try {
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("select humans.name, humans.passport_number, "
+								+ "humans.address, "
+								+ "inspectors.inspector_id, inspectors.login, inspectors.password, "
+								+ "ranks.rank, posts.post "
+								+ "from gibdd_system_db.humans, gibdd_system_db.inspectors, "
+								+ "gibdd_system_db.ranks, gibdd_system_db.posts, gibdd_system_db.patrol_inspectors "
+								+ "where "
+								+ "inspectors.login = ? and inspectors.password = ?"
+								+ " and "
+								+ "humans.human_id = inspectors.human_id and "
+								+ "ranks.rank_id = inspectors.rank_id and "
+								+ "posts.post_id = inspectors.post_id and patrol_inspectors.inspector_id = inspectors.inspector_id");
 
+				stmt.setString(1, login);
+				stmt.setString(2, password);
+
+				ResultSet res = stmt.executeQuery();
+
+				while (res.next()) {
+					this.id = res.getInt(4);
+					this.name = res.getString(1);
+					this.passportNumber = res.getString(2);
+					this.address = res.getString(3);
+					this.login = res.getString(5);
+					this.password = res.getString(6);
+					this.rank = res.getString(7);
+					this.post = res.getString(8);
+				}
+
+				System.out.println("...Row with string representation \n\t"
+						+ this.toString() + "\nwas selected from base");
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	public String toString() {
 		return super.toString();
