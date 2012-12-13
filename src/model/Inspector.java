@@ -132,17 +132,17 @@ public class Inspector extends Human {
 		try {
 			Connection conn = this.getConnection();
 			try {
-				PreparedStatement stmtIns = conn.prepareStatement(
+				PreparedStatement stmt = conn.prepareStatement(
 						"insert into gibdd_system_db.inspectors (inspector_id, login, password, "
 								+ "human_id, rank_id, post_id)"
 								+ " values (default, ?, ?, ?, ?, ?)",
 						Statement.RETURN_GENERATED_KEYS);
-				stmtIns.setString(1, this.login);
-				stmtIns.setString(2, this.password);
+				stmt.setString(1, this.login);
+				stmt.setString(2, this.password);
 
 				Human tmp = new Human((Human) this);
 				tmp.insert();
-				stmtIns.setInt(3, tmp.id);
+				stmt.setInt(3, tmp.id);
 
 				PreparedStatement stmtSlct = conn
 						.prepareStatement("select rank_id from gibdd_system_db.ranks where "
@@ -150,7 +150,7 @@ public class Inspector extends Human {
 				stmtSlct.setString(1, this.rank);
 				ResultSet res = stmtSlct.executeQuery();
 				while (res.next())
-					stmtIns.setInt(4, res.getInt(1));
+					stmt.setInt(4, res.getInt(1));
 
 				stmtSlct = conn
 						.prepareStatement("select post_id from gibdd_system_db.posts"
@@ -158,11 +158,11 @@ public class Inspector extends Human {
 				stmtSlct.setString(1, this.post);
 				res = stmtSlct.executeQuery();
 				while (res.next())
-					stmtIns.setInt(5, res.getInt(1));
+					stmt.setInt(5, res.getInt(1));
 
-				stmtIns.executeUpdate();
+				stmt.executeUpdate();
 
-				ResultSet key = stmtIns.getGeneratedKeys();
+				ResultSet key = stmt.getGeneratedKeys();
 				key.next();
 				this.id = key.getInt(1);
 

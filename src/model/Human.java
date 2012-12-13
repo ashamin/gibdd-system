@@ -157,7 +157,7 @@ public class Human extends DBObject {
 								+ "\nwas updated to\n\t"
 								+ this.toString());
 			} catch (Exception e) {
-
+				e.printStackTrace();
 			} finally {
 				conn.close();
 			}

@@ -1,5 +1,8 @@
 ﻿package model;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -205,32 +208,71 @@ public class PatrolInspector extends Inspector implements Runnable {
 	 */
 	@Override
 	public void insert() {
-		// TODO implement database insert operation
-		throw new UnsupportedOperationException("not implemented");
+		super.insert();
+		try {
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn.prepareStatement(
+						"insert into gibdd_system_db.patrol_inspectors (patrol_inspector_id, inspector_id)"
+								+ " values (default, ?)",
+						Statement.RETURN_GENERATED_KEYS);
+				stmt.setInt(1, this.id);
+				
+				stmt.executeUpdate();
+
+				System.out.println("...Row with string representation \n\t"
+						+ this.toString() + "\nwas added");
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void update() {
-		// TODO implement database update operation
-		throw new UnsupportedOperationException("not implemented");
+		super.update();
 	}
 
 	@Override
 	public void delete() {
-		// TODO implement database delete operation
-		throw new UnsupportedOperationException("not implemented");
+		try {
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("delete from gibdd_system_db.patrol_inspectors where inspector_id = "
+								+ Integer.toString(this.id));
+				
+				stmt.executeUpdate();
+				
+				super.delete();
+
+				System.out.println("...Row with string representation \n\t"
+						+ this.toString() + "\nwas deleted from base");
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void select(int id) {
-		// TODO implement database select operation
-		throw new UnsupportedOperationException("not implemented");
+		super.select(id);
 	}
 
 	@Override
 	public String toString() {
-		// TODO implement string representation of the object
-		throw new UnsupportedOperationException("not implemented");
+		return super.toString();
 	}
 
 	/**
