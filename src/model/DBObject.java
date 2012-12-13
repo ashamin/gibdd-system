@@ -42,7 +42,7 @@ public abstract class DBObject {
 	/**
 	 * Константа, определяющая значение неопределенного идентификатора
 	 */
-	private static final int UNDEFINED_ID = 0;
+	public static final int UNDEFINED_ID = 0;
 
 	/**
 	 * Уникальный идентификатор
@@ -96,9 +96,6 @@ public abstract class DBObject {
 	 * @return уникальный идентификатор
 	 */
 	public int getId() {
-		if (this.id == UNDEFINED_ID) {
-			this.insert();
-		}
 		return this.id;
 	}
 
