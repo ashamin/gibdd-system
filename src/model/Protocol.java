@@ -1,6 +1,6 @@
 ﻿package model;
 
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * Protocol Класс протокол. Содержит всю информацию о нарушении, человеке,
@@ -82,7 +82,7 @@ public class Protocol extends DBObject {
 	public Protocol() {
 		this.human = new Human();
 		this.violation = new Violation();
-		this.date = new Date();
+		this.date = new Date(0, 0, 0);
 		this.velicle = new Vehicle();
 		this.patrolInspector = new PatrolInspector();
 	}

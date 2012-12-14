@@ -1,6 +1,6 @@
 ﻿package model;
 
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * VehicleRegistrationSertificate Класс свидетельство о регистрации. Содержит
@@ -87,8 +87,8 @@ public class VehicleRegistrationCertificate extends DBObject {
 		this.vehicle = new Vehicle();
 		this.human = new Human();
 		this.registrationNumber = "";
-		this.registrationDate = new Date();
-		this.leaveDate = new Date();
+		this.registrationDate = new Date(0, 0, 0);
+		this.leaveDate = new Date(0, 0, 0);
 		this.vehicleInspector = new VehicleInspector();
 	}
 

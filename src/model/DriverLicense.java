@@ -1,6 +1,10 @@
 ﻿package model;
 
-import java.util.Date;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.Date;
 
 /**
  * DriverLicense Класс водительское удостоверение. Содержит всю информацию о
@@ -83,8 +87,8 @@ public class DriverLicense extends DBObject {
 	public DriverLicense() {
 		this.human = new Human();
 		this.inspector = new DriverLicenseInspector();
-		this.registrationDate = new Date();
-		this.leaveDate = new Date();
+		this.registrationDate = new Date(0, 0, 0);
+		this.leaveDate = new Date(0, 0, 0);
 		this.categories = "";
 	}
 
@@ -114,6 +118,7 @@ public class DriverLicense extends DBObject {
 	 * @param driverLicense
 	 */
 	public DriverLicense(DriverLicense driverLicense) {
+		this.id = driverLicense.id;
 		this.human = driverLicense.human;
 		this.inspector = driverLicense.inspector;
 		this.registrationDate = driverLicense.registrationDate;
@@ -126,8 +131,40 @@ public class DriverLicense extends DBObject {
 	 */
 	@Override
 	public void insert() {
-		// TODO implement database insert operation
-		throw new UnsupportedOperationException("not implemented");
+		try {
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement(
+								"insert into gibdd_system_db.driver_licenses (driver_license_id, registration_date, "
+										+ "leave_date, categories, driver_license_inspector_id, "
+										+ "human_id)"
+										+ "values (default, ?, ?, ?, ?, ?)",
+								Statement.RETURN_GENERATED_KEYS);
+				stmt.setDate(1, this.registrationDate);
+				stmt.setDate(2, this.leaveDate);
+				stmt.setString(3, this.categories);
+				stmt.setInt(4, this.inspector.getBaseId());
+				stmt.setInt(5, this.human.getId());
+
+				stmt.executeUpdate();
+
+				ResultSet key = stmt.getGeneratedKeys();
+				key.next();
+				this.id = key.getInt(1);
+
+				System.out.println("...Row with string representation \n\t"
+						+ this.toString() + "\nwas added");
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	@Override
@@ -144,14 +181,54 @@ public class DriverLicense extends DBObject {
 
 	@Override
 	public void select(int id) {
-		// TODO implement database select operation
-		throw new UnsupportedOperationException("not implemented");
+		try {
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("select driver_license_id, registration_date, leave_date, categories, "
+								+ "driver_license_inspectors.inspector_id, human_id "
+								+ "from gibdd_system_db.driver_licenses, gibdd_system_db.driver_license_inspectors "
+								+ "where driver_license_id = "
+								+ Integer.toString(id)
+								+ " and "
+								+ "driver_license_inspectors.driver_license_inspector_id = driver_licenses.driver_license_inspector_id");
+				ResultSet res = stmt.executeQuery();
+
+				while (res.next()) {
+					this.id = res.getInt(1);
+					this.registrationDate = res.getDate(2);
+					this.leaveDate = res.getDate(3);
+					this.categories = res.getString(4);
+					this.inspector.select(res.getInt(5));
+					this.human.select(res.getInt(6));
+				}
+
+				System.out.println("...Row with string representation \n\t"
+						+ this.toString() + "\nwas selected from base");
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	@Override
 	public String toString() {
-		// TODO implement string representation of the object
-		throw new UnsupportedOperationException("not implemented");
+		StringBuilder ret = new StringBuilder();
+		ret.append("id = " + Integer.toString(this.id) + ", ");
+		ret.append("registration date = " + this.registrationDate.toString()
+				+ ", ");
+		ret.append("leave date = " + this.leaveDate.toString() + ", ");
+		ret.append("categories = " + this.categories + ", ");
+		ret.append("inspector = " + this.inspector.toString() + ", ");
+		ret.append("owner = " + this.human.toString());
+		return ret.toString();
 	}
 
 	/**

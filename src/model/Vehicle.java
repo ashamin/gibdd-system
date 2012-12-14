@@ -1,6 +1,6 @@
 ﻿package model;
 
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * Класс транспортного средства. Содержит информацию о транспортном средстве. К
@@ -80,7 +80,7 @@ public class Vehicle extends DBObject {
 		this.EIN = "";
 		this.color = "";
 		this.brand = "";
-		this.year = new Date();
+		this.year = new Date(0, 0, 0);
 	}
 
 	/**

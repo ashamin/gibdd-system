@@ -1,6 +1,6 @@
 ﻿package model;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -85,8 +85,8 @@ public class DutyTour extends DBObject {
 		this.patrolInspectors = new HashSet<PatrolInspector>();
 		this.automaticRecorders = new HashSet<AutomaticRecorder>();
 		this.dutyInspector = new DutyInspector();
-		this.startDate = new Date();
-		this.finishDate = new Date();
+		this.startDate = new Date(0, 0, 0);
+		this.finishDate = new Date(0, 0, 0);
 	}
 
 	/**

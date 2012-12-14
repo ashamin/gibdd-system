@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.Date;
+import java.sql.Date;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -213,12 +213,13 @@ public class PatrolInspector extends Inspector implements Runnable {
 		try {
 			Connection conn = this.getConnection();
 			try {
-				PreparedStatement stmt = conn.prepareStatement(
-						"insert into gibdd_system_db.patrol_inspectors (patrol_inspector_id, inspector_id)"
-								+ " values (default, ?)",
-						Statement.RETURN_GENERATED_KEYS);
+				PreparedStatement stmt = conn
+						.prepareStatement(
+								"insert into gibdd_system_db.patrol_inspectors (patrol_inspector_id, inspector_id)"
+										+ " values (default, ?)",
+								Statement.RETURN_GENERATED_KEYS);
 				stmt.setInt(1, this.id);
-				
+
 				stmt.executeUpdate();
 
 				System.out.println("...Row with string representation \n\t"
@@ -248,9 +249,9 @@ public class PatrolInspector extends Inspector implements Runnable {
 				PreparedStatement stmt = conn
 						.prepareStatement("delete from gibdd_system_db.patrol_inspectors where inspector_id = "
 								+ Integer.toString(this.id));
-				
+
 				stmt.executeUpdate();
-				
+
 				super.delete();
 
 				System.out.println("...Row with string representation \n\t"
@@ -266,11 +267,48 @@ public class PatrolInspector extends Inspector implements Runnable {
 		}
 	}
 
+	/**
+	 * Возвращает значение первичного ключа для инспектора, из таблицы
+	 * duty_inspectors
+	 * 
+	 * @return первичный ключ
+	 */
+	public int getBaseId() {
+		int bid = 0;
+		try {
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("select patrol_inspector_id "
+								+ "from gibdd_system_db.patrol_inspectors where inspector_id = "
+								+ Integer.toString(this.id));
+				ResultSet res = stmt.executeQuery();
+
+				while (res.next()) {
+					bid = res.getInt(1);
+				}
+
+				/*System.out.println("...Row with string representation \n\t"
+						+ this.toString() + "\nwas selected from base");*/
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return bid;
+	}
+
 	@Override
 	public void select(int id) {
 		super.select(id);
 	}
-	
+
 	@Override
 	public void select(String login, String password) {
 		try {
@@ -319,7 +357,7 @@ public class PatrolInspector extends Inspector implements Runnable {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		return super.toString();

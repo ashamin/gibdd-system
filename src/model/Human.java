@@ -198,7 +198,7 @@ public class Human extends DBObject {
 				PreparedStatement stmt = conn
 						.prepareStatement("select human_id, name, passport_number, address"
 								+ " from gibdd_system_db.humans where human_id = "
-								+ Integer.toString(this.id));
+								+ Integer.toString(id));
 				ResultSet res = stmt.executeQuery();
 
 				while (res.next()) {

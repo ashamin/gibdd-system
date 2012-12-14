@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.Date;
+import java.sql.Date;
 import java.util.Set;
 
 /**
@@ -236,6 +236,45 @@ public class DutyInspector extends Inspector {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Возвращает значение первичного ключа для инспектора, из таблицы
+	 * duty_inspectors
+	 * 
+	 * @return первичный ключ
+	 */
+	public int getBaseId() {
+		int bid = 0;
+		try {
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("select duty_inspector_id "
+								+ "from gibdd_system_db.duty_inspectors where inspector_id = "
+								+ Integer.toString(this.id));
+				ResultSet res = stmt.executeQuery();
+
+				while (res.next()) {
+					bid = res.getInt(1);
+				}
+
+				/*
+				 * System.out.println("...Row with string representation \n\t" +
+				 * this.toString() + "\nwas selected from base");
+				 */
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return bid;
 	}
 
 	@Override
