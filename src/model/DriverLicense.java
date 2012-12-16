@@ -119,15 +119,19 @@ public class DriverLicense extends DBObject {
 	 */
 	public DriverLicense(DriverLicense driverLicense) {
 		this.id = driverLicense.id;
-		this.human = driverLicense.human;
-		this.inspector = driverLicense.inspector;
+		this.human = new Human(driverLicense.human);
+		this.inspector = new DriverLicenseInspector(driverLicense.inspector);
 		this.registrationDate = driverLicense.registrationDate;
 		this.leaveDate = driverLicense.leaveDate;
 		this.categories = driverLicense.categories;
 	}
 
 	/**
-	 * Переопределяются методы базового класса
+	 * Переопределенный метод класса DBObject. Записывает в базу объект типа
+	 * водительское удостоверение. Для того, чтобы привести индекс инспектора к
+	 * тому индексу, который ожидает база применяется метод getBaseId. Можно
+	 * сказать, что функция абстракции метода getBaseId(inspector_id) =
+	 * driver_license_inspector_id
 	 */
 	@Override
 	public void insert() {
@@ -167,18 +171,84 @@ public class DriverLicense extends DBObject {
 
 	}
 
+	/**
+	 * Обновляет представление объекта в базе данных, в соответствие с
+	 * изменениями, произведенными над копией объекта в памяти.
+	 */
 	@Override
 	public void update() {
-		// TODO implement database update operation
-		throw new UnsupportedOperationException("not implemented");
+		try {
+			DriverLicense tmp = new DriverLicense(this);
+			tmp.select(this.id);
+			String oldRepr = tmp.toString();
+
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("update gibdd_system_db.driver_licenses set "
+								+ "registration_date=?, "
+								+ "leave_date=?, "
+								+ "categories=?, driver_license_inspector_id=?, "
+								+ "human_id=? "
+								+ "where driver_license_id = "
+								+ Integer.toString(this.id));
+				stmt.setDate(1, this.registrationDate);
+				stmt.setDate(2, this.leaveDate);
+				stmt.setString(3, this.categories);
+				stmt.setInt(4, this.inspector.getBaseId());
+				stmt.setInt(5, this.human.getId());
+
+				stmt.executeUpdate();
+
+				System.out
+						.println("...Row in base with string representation \n\t"
+								+ oldRepr
+								+ "\nwas updated to\n\t"
+								+ this.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
+	/**
+	 * Удаляет представление объекта водительское удостоверение из базы данных.
+	 */
 	@Override
 	public void delete() {
-		// TODO implement database delete operation
-		throw new UnsupportedOperationException("not implemented");
+		try {
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("delete from gibdd_system_db.driver_licenses where driver_license_id = "
+								+ Integer.toString(this.id));
+				stmt.executeUpdate();
+
+				System.out.println("...Row with string representation \n\t"
+						+ this.toString() + "\nwas deleted from base");
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
+	/**
+	 * Загружает в память представление объекта с индексом = id в соответствии с
+	 * его представлением в базе, а также представлениями в базе других его
+	 * объектов, таких как Human и Inspector. <br>
+	 * Объект инспектор загружается не по driver_license_inspector_id, а по
+	 * inspector_id. Это указано в sql запросе см ниже.
+	 */
 	@Override
 	public void select(int id) {
 		try {
