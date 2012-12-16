@@ -102,8 +102,8 @@ public class AutomaticRecorder extends DBObject implements Runnable {
 	 */
 	public AutomaticRecorder(AutomaticRecorder recorder) {
 		this.UID = recorder.UID;
-		this.coordinates = recorder.coordinates;
-		this.dutyTour = recorder.dutyTour;
+		this.coordinates = new EarthCoordinates(recorder.coordinates);
+		this.dutyTour = new DutyTour(recorder.dutyTour);
 		this.running = recorder.running;
 	}
 

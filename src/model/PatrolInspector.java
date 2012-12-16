@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -131,8 +132,16 @@ public class PatrolInspector extends Inspector implements Runnable {
 	 */
 	public PatrolInspector(PatrolInspector inspector) {
 		super((Inspector) inspector);
-		this.queue = new LinkedList<Protocol>(inspector.queue);
-		this.coordinates = inspector.coordinates;
+		
+		this.queue = new LinkedList<Protocol>();
+		Protocol tmp;
+		Iterator<Protocol> it = inspector.queue.iterator();
+		while(it.hasNext()){
+			tmp = it.next();
+			this.queue.add(new Protocol(tmp));
+		}
+				
+		this.coordinates = new EarthCoordinates(inspector.coordinates);
 		this.running = inspector.running;
 	}
 

@@ -1,6 +1,7 @@
 ﻿package model;
 
 import java.sql.Date;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -111,16 +112,30 @@ public class DutyTour extends DBObject {
 	/**
 	 * Конструктор копирования для класса DutyTour. <br/>
 	 * Создает копию объекта DutyTour(объект с идентичными значениями параметров
-	 * входного экземпляра класса DutyTour).
+	 * входногоI экземпляра класса DutyTour).
 	 * 
 	 * @param dutyTour
 	 */
 	public DutyTour(DutyTour dutyTour) {
-		this.patrolInspectors = dutyTour.patrolInspectors;
-		this.automaticRecorders = dutyTour.automaticRecorders;
-		this.dutyInspector = dutyTour.dutyInspector;
-		this.startDate = dutyTour.startDate;
-		this.finishDate = dutyTour.finishDate;
+		DBObject tmp;
+		this.patrolInspectors = new HashSet<PatrolInspector>();
+		this.automaticRecorders = new HashSet<AutomaticRecorder>();
+		
+		Iterator<PatrolInspector> itp = dutyTour.patrolInspectors.iterator();
+		while(itp.hasNext()){
+			tmp = itp.next();
+			this.patrolInspectors.add(new PatrolInspector((PatrolInspector)tmp));
+		}
+		
+		Iterator<AutomaticRecorder> ita = dutyTour.automaticRecorders.iterator();
+		while(ita.hasNext()){
+			tmp = ita.next();
+			this.automaticRecorders.add(new AutomaticRecorder((AutomaticRecorder)tmp));
+		}
+
+		this.dutyInspector = new DutyInspector(dutyTour.dutyInspector);
+		this.startDate = new Date(dutyTour.startDate.getTime());
+		this.finishDate = new Date(dutyTour.finishDate.getTime());
 	}
 
 	/**

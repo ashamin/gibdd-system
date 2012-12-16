@@ -123,12 +123,12 @@ public class VehicleRegistrationCertificate extends DBObject {
 	 */
 	public VehicleRegistrationCertificate(
 			VehicleRegistrationCertificate vehicleRegistrationCertificate) {
-		this.vehicle = vehicleRegistrationCertificate.vehicle;
-		this.human = vehicleRegistrationCertificate.human;
+		this.vehicle = new Vehicle(vehicleRegistrationCertificate.vehicle);
+		this.human = new Human(vehicleRegistrationCertificate.human);
 		this.registrationNumber = vehicleRegistrationCertificate.registrationNumber;
-		this.registrationDate = vehicleRegistrationCertificate.registrationDate;
-		this.leaveDate = vehicleRegistrationCertificate.leaveDate;
-		this.vehicleInspector = vehicleRegistrationCertificate.vehicleInspector;
+		this.registrationDate = new Date(vehicleRegistrationCertificate.registrationDate.getTime());
+		this.leaveDate = new Date(vehicleRegistrationCertificate.leaveDate.getTime());
+		this.vehicleInspector = new VehicleInspector(vehicleRegistrationCertificate.vehicleInspector);
 	}
 
 	/**

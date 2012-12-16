@@ -113,11 +113,11 @@ public class Protocol extends DBObject {
 	 * @param protocol
 	 */
 	public Protocol(Protocol protocol) {
-		this.human = protocol.human;
-		this.violation = protocol.violation;
-		this.velicle = protocol.velicle;
-		this.date = protocol.date;
-		this.patrolInspector = protocol.patrolInspector;
+		this.human = new Human(protocol.human);
+		this.violation = new Violation(protocol.violation);
+		this.velicle = new Vehicle(protocol.velicle);
+		this.date = new Date(protocol.date.getTime());
+		this.patrolInspector = new PatrolInspector(protocol.patrolInspector);
 	}
 
 	/**

@@ -112,7 +112,7 @@ public class Vehicle extends DBObject {
 		this.EIN = vehicle.EIN;
 		this.color = vehicle.color;
 		this.brand = vehicle.brand;
-		this.year = vehicle.year;
+		this.year = new Date(vehicle.year.getTime());
 	}
 
 	/**

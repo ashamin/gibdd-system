@@ -121,8 +121,8 @@ public class DriverLicense extends DBObject {
 		this.id = driverLicense.id;
 		this.human = new Human(driverLicense.human);
 		this.inspector = new DriverLicenseInspector(driverLicense.inspector);
-		this.registrationDate = driverLicense.registrationDate;
-		this.leaveDate = driverLicense.leaveDate;
+		this.registrationDate = new Date(driverLicense.registrationDate.getTime());
+		this.leaveDate = new Date(driverLicense.registrationDate.getTime());
 		this.categories = driverLicense.categories;
 	}
 
