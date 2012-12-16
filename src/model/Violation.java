@@ -1,5 +1,10 @@
 ﻿package model;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
 /**
  * Класс нарушение. Класс нарушение. Содержит наименование нарушения, описание
  * действий относящихся к нарушению и ответственность, которую несет человек
@@ -95,32 +100,135 @@ public class Violation extends DBObject {
 	 */
 	@Override
 	public void insert() {
-		// TODO implement database insert operation
-		throw new UnsupportedOperationException("not implemented");
+		try {
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement(
+								"insert into gibdd_system_db.violations (violation_id, title, "
+										+ "description, punishment) values (default, ?, ?, ?)",
+								Statement.RETURN_GENERATED_KEYS);
+				stmt.setString(1, this.title);
+				stmt.setString(2, this.description);
+				stmt.setString(3, this.punishment);
+				stmt.executeUpdate();
+
+				ResultSet key = stmt.getGeneratedKeys();
+				key.next();
+				this.id = key.getInt(1);
+
+				System.out.println("...Row with string representation \n\t"
+						+ this.toString() + "\nwas added");
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void update() {
-		// TODO implement database update operation
-		throw new UnsupportedOperationException("not implemented");
+		try {
+			Violation tmp = new Violation(this);
+			tmp.select(this.id);
+			String oldRepr = tmp.toString();
+
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("update gibdd_system_db.violations set"
+								+ " title=?," + " description=?, "
+								+ "punishment=? where violation_id = "
+								+ Integer.toString(this.id));
+				stmt.setString(1, this.title);
+				stmt.setString(2, this.description);
+				stmt.setString(3, this.punishment);
+
+				stmt.executeUpdate();
+
+				System.out
+						.println("...Row in base with string representation \n\t"
+								+ oldRepr
+								+ "\nwas updated to\n\t"
+								+ this.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void delete() {
-		// TODO implement database delete operation
-		throw new UnsupportedOperationException("not implemented");
+		try {
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("delete from gibdd_system_db.violations where violation_id = "
+								+ Integer.toString(this.id));
+				stmt.executeUpdate();
+
+				System.out.println("...Row with string representation \n\t"
+						+ this.toString() + "\nwas deleted from base");
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void select(int id) {
-		// TODO implement database select operation
-		throw new UnsupportedOperationException("not implemented");
+		try {
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("select violation_id, title, description, punishment"
+								+ " from gibdd_system_db.violations where violation_id = "
+								+ Integer.toString(id));
+				ResultSet res = stmt.executeQuery();
+
+				while (res.next()) {
+					this.id = res.getInt(1);
+					this.title = res.getString(2);
+					this.description = res.getString(3);
+					this.punishment = res.getString(4);
+				}
+
+				System.out.println("...Row with string representation \n\t"
+						+ this.toString() + "\nwas selected from base");
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public String toString() {
-		// TODO implement string representation of the object
-		throw new UnsupportedOperationException("not implemented");
+		StringBuilder sb = new StringBuilder();
+		sb.append("id = " + this.id + ", ");
+		sb.append("title = " + this.title + ", ");
+		sb.append("description = " + this.description + ", ");
+		sb.append("punishment = " + this.punishment);
+		return sb.toString();
 	}
 
 	/**
