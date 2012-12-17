@@ -1,6 +1,10 @@
 ﻿package model;
 
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 /**
  * Класс транспортного средства. Содержит информацию о транспортном средстве. К
@@ -120,26 +124,159 @@ public class Vehicle extends DBObject {
 	 */
 	@Override
 	public void insert() {
-		// TODO implement database insert operation
-		throw new UnsupportedOperationException("not implemented");
+		try {
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement(
+								"insert into gibdd_system_db.vehicles "
+										+ "(vehicle_id, VIN, EIN, color, year, brand_id) "
+										+ "values (default, ?, ?, ?, ?, ?)",
+								Statement.RETURN_GENERATED_KEYS);
+				stmt.setString(1, this.VIN);
+				stmt.setString(2, this.EIN);
+				stmt.setString(3, this.color);
+				stmt.setDate(4, this.year);
+
+				/*
+				 * выбираем индекс марки автомобиля из таблицы Brands
+				 */
+				PreparedStatement stmtSel = conn
+						.prepareStatement("select brand_id from gibdd_system_db.brands "
+								+ "where brand = ?");
+				stmtSel.setString(1, this.brand);
+				ResultSet res = stmtSel.executeQuery();
+				while (res.next()) {
+					stmt.setInt(5, res.getInt(1));
+				}
+
+				stmt.executeUpdate();
+
+				ResultSet key = stmt.getGeneratedKeys();
+				key.next();
+				this.id = key.getInt(1);
+
+				System.out.println("...Row with string representation \n\t"
+						+ this.toString() + "\nwas added");
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void update() {
-		// TODO implement database update operation
-		throw new UnsupportedOperationException("not implemented");
+		try {
+			Vehicle tmp = new Vehicle(this);
+			tmp.select(this.id);
+			String oldRepr = tmp.toString();
+
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("update gibdd_system_db.vehicles set "
+								+ "VIN=?, EIN=?, "
+								+ "color=?, year=?, brand_id=? "
+								+ "where vehicle_id = "
+								+ Integer.toString(this.id));
+				stmt.setString(1, this.VIN);
+				stmt.setString(2, this.EIN);
+				stmt.setString(3, this.color);
+				stmt.setDate(4, this.year);
+
+				/*
+				 * выбираем индекс марки автомобиля из таблицы Brands
+				 */
+				PreparedStatement stmtSel = conn
+						.prepareStatement("select brand_id from gibdd_system_db.brands "
+								+ "where brand = ?");
+				stmtSel.setString(1, this.brand);
+				ResultSet res = stmtSel.executeQuery();
+				while (res.next()) {
+					stmt.setInt(5, res.getInt(1));
+				}
+
+				stmt.executeUpdate();
+
+				System.out
+						.println("...Row in base with string representation \n\t"
+								+ oldRepr
+								+ "\nwas updated to\n\t"
+								+ this.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void delete() {
-		// TODO implement database delete operation
-		throw new UnsupportedOperationException("not implemented");
+		try {
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("delete from gibdd_system_db.vehicles where vehicle_id = "
+								+ Integer.toString(this.id));
+				stmt.executeUpdate();
+
+				System.out.println("...Row with string representation \n\t"
+						+ this.toString() + "\nwas deleted from base");
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void select(int id) {
-		// TODO implement database select operation
-		throw new UnsupportedOperationException("not implemented");
+		try {
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("select vehicles.vehicle_id, vehicles.VIN, vehicles.EIN, "
+								+ "vehicles.color, vehicles.year, brands.brand "
+								+ "from gibdd_system_db.vehicles, gibdd_system_db.brands "
+								+ "where vehicle_id = "
+								+ Integer.toString(id)
+								+ " and vehicles.brand_id = brands.brand_id");
+				ResultSet res = stmt.executeQuery();
+
+				while (res.next()) {
+					this.id = res.getInt(1);
+					this.VIN = res.getString(2);
+					this.EIN = res.getString(3);
+					this.color = res.getString(4);
+					this.year = res.getDate(5);
+					this.brand = res.getString(6);
+				}
+
+				System.out.println("...Row with string representation \n\t"
+						+ this.toString() + "\nwas selected from base");
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

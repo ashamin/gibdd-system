@@ -106,10 +106,11 @@ public class Human extends DBObject {
 		try {
 			Connection conn = this.getConnection();
 			try {
-				PreparedStatement stmt = conn
-						.prepareStatement(
-								"insert into gibdd_system_db.humans values (default, ?, ?, ?)",
-								Statement.RETURN_GENERATED_KEYS);
+				PreparedStatement stmt = conn.prepareStatement(
+						"insert into gibdd_system_db.humans "
+								+ "(human_id, name, passport_number, address) "
+								+ "values (default, ?, ?, ?)",
+						Statement.RETURN_GENERATED_KEYS);
 				stmt.setString(1, this.name);
 				stmt.setString(2, this.passportNumber);
 				stmt.setString(3, this.address);
