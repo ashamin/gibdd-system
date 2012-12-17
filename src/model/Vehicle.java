@@ -144,8 +144,14 @@ public class Vehicle extends DBObject {
 
 	@Override
 	public String toString() {
-		// TODO implement string representation of the object
-		throw new UnsupportedOperationException("not implemented");
+		StringBuilder sb = new StringBuilder();
+		sb.append("id = " + this.id + ", ");
+		sb.append("VIN = " + this.VIN + ", ");
+		sb.append("EIN = " + this.EIN + ", ");
+		sb.append("color = " + this.color + ", ");
+		sb.append("year = " + this.year + ", ");
+		sb.append("brand = " + this.brand);
+		return sb.toString();
 	}
 
 	/**
