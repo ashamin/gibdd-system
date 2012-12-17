@@ -1,9 +1,8 @@
-<%@page import="model.VehicleInspector"%>
+<%@page import="model.Inspector"%>
 <%@page import="model.DriverLicenseInspector"%>
 <%@page import="model.DutyInspector"%>
 <%@page import="model.PatrolInspector"%>
-
-<%@page import="model.Inspector"%>
+<%@page import="model.VehicleInspector"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -67,7 +66,7 @@
 					<tr>
 						<td colspan="2"><input type="button"
 							value="Просмотреть наряд" style='width: 100%'
-							onclick="location.href='#'"></td>
+							onclick="location.href='view-duty-tour.jsp'"></td>
 					</tr>
 					<tr>
 						<td colspan="2"><input type="button" value="Добавить наряд"
@@ -108,13 +107,11 @@
 					</tr>
 					<tr>
 						<td colspan="2"><input type="button" style='width: 100%'
-							value="Заполнить следующий протокол"
-							onclick="location.href='#'"></td>
+							value="Заполнить следующий протокол" onclick="location.href='#'"></td>
 					</tr>
 					<tr>
 						<td colspan="2"><input type="button" style='width: 100%'
-							value="Просмотреть протокол"
-							onclick="location.href='#'"></td>
+							value="Просмотреть протокол" onclick="location.href='#'"></td>
 					</tr>
 				</table>
 			</fieldset>
@@ -142,8 +139,7 @@
 					<tr>
 						<td><input type="button"
 							value="Новое свидетельство о регистрации" style='width: 100%'
-							onclick="location.href='#'">
-						</td>
+							onclick="location.href='#'"></td>
 					</tr>
 				</table>
 			</fieldset>

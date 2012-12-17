@@ -49,6 +49,7 @@ public class LoginServlet extends HttpServlet {
 		} else {
 			inspector = new DutyInspector();
 			inspector.select(login, password);
+			
 			if (inspector.getId() != DBObject.UNDEFINED_ID) {
 				correctLogin = true;
 			} else {
@@ -60,6 +61,7 @@ public class LoginServlet extends HttpServlet {
 				} else {
 					inspector = new VehicleInspector();
 					inspector.select(login, password);
+					
 					if (inspector.getId() != DBObject.UNDEFINED_ID) {
 						correctLogin = true;
 					}
@@ -68,9 +70,9 @@ public class LoginServlet extends HttpServlet {
 		}
 
 		if (correctLogin) {
-			session.setAttribute("login-error", null);
 			session.setAttribute("inspector", inspector);
-
+			session.setAttribute("login-error", null);
+			
 			response.sendRedirect("workspace.jsp");
 		} else {
 			session.setAttribute("login-error",

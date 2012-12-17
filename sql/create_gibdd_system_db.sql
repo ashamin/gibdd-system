@@ -56,6 +56,7 @@ CREATE TABLE protocols
   violation_id Int UNSIGNED,
   patrol_inspector_id Int UNSIGNED,
   vehicle_id Int UNSIGNED,
+  human_id Int UNSIGNED,
  PRIMARY KEY (protocol_id),
  UNIQUE protocol_id (protocol_id)
 );
@@ -136,6 +137,7 @@ CREATE TABLE vehicle_registration_certificates
   registration_number Char(20) NOT NULL,
   vehicle_inspector_id Int UNSIGNED,
   vehicle_id Int UNSIGNED,
+  human_id Int UNSIGNED,
  PRIMARY KEY (vehicle_registration_certificate_id),
  UNIQUE vehicle_registration_certificate_id (vehicle_registration_certificate_id)
 );
@@ -234,7 +236,11 @@ ALTER TABLE vehicle_registration_certificates ADD CONSTRAINT made_by FOREIGN KEY
 
 ALTER TABLE vehicle_registration_certificates ADD CONSTRAINT have_inf FOREIGN KEY (vehicle_id) REFERENCES vehicles (vehicle_id) ON DELETE RESTRICT ON UPDATE CASCADE;
 
+ALTER TABLE vehicle_registration_certificates ADD CONSTRAINT have_inf1 FOREIGN KEY (human_id) REFERENCES humans (human_id) ON DELETE RESTRICT ON UPDATE CASCADE;
+
 ALTER TABLE protocols ADD CONSTRAINT tell_about FOREIGN KEY (violation_id) REFERENCES violations (violation_id) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+ALTER TABLE protocols ADD CONSTRAINT has1  FOREIGN KEY (human_id) REFERENCES humans (human_id) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 ALTER TABLE protocols ADD CONSTRAINT is_filled FOREIGN KEY (patrol_inspector_id) REFERENCES patrol_inspectors (patrol_inspector_id) ON DELETE RESTRICT ON UPDATE CASCADE;
 
