@@ -1,6 +1,10 @@
 ﻿package model;
 
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 /**
  * Protocol Класс протокол. Содержит всю информацию о нарушении, человеке,
@@ -67,7 +71,7 @@ public class Protocol extends DBObject {
 	/**
 	 * Автомобиль
 	 */
-	private Vehicle velicle;
+	private Vehicle vehicle;
 
 	/**
 	 * Патрульный инспектор
@@ -83,7 +87,7 @@ public class Protocol extends DBObject {
 		this.human = new Human();
 		this.violation = new Violation();
 		this.date = new Date(0, 0, 0);
-		this.velicle = new Vehicle();
+		this.vehicle = new Vehicle();
 		this.patrolInspector = new PatrolInspector();
 	}
 
@@ -101,7 +105,7 @@ public class Protocol extends DBObject {
 		this.human = human;
 		this.violation = violation;
 		this.date = date;
-		this.velicle = vehicle;
+		this.vehicle = vehicle;
 		this.patrolInspector = patrolInspector;
 	}
 
@@ -115,7 +119,7 @@ public class Protocol extends DBObject {
 	public Protocol(Protocol protocol) {
 		this.human = new Human(protocol.human);
 		this.violation = new Violation(protocol.violation);
-		this.velicle = new Vehicle(protocol.velicle);
+		this.vehicle = new Vehicle(protocol.vehicle);
 		this.date = new Date(protocol.date.getTime());
 		this.patrolInspector = new PatrolInspector(protocol.patrolInspector);
 	}
@@ -125,32 +129,166 @@ public class Protocol extends DBObject {
 	 */
 	@Override
 	public void insert() {
-		// TODO implement database insert operation
-		throw new UnsupportedOperationException("not implemented");
+		Human h = null;
+		if (h == null)
+			throw new UnsupportedOperationException("ADD HUMAN STUFF");
+		try {
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement(
+								"insert into gibdd_system_db.protocols (protocol_id, date, "
+										+ "violation_id, patrol_inspector_id, vehicle_id) "
+										+ "values (default, ?, ?, ?, ?)",
+								Statement.RETURN_GENERATED_KEYS);
+				stmt.setDate(1, this.date);
+				stmt.setInt(2, this.violation.getId());
+				stmt.setInt(3, this.patrolInspector.getBaseId());
+				stmt.setInt(4, this.vehicle.getId());
+				// stmt.setInt(5, this.human.getId());
+
+				stmt.executeUpdate();
+
+				ResultSet key = stmt.getGeneratedKeys();
+				key.next();
+				this.id = key.getInt(1);
+
+				System.out.println("...Row with string representation \n\t"
+						+ this.toString() + "\nwas added");
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void update() {
-		// TODO implement database update operation
-		throw new UnsupportedOperationException("not implemented");
+		Human h = null;
+		if (h == null)
+			throw new UnsupportedOperationException("ADD HUMAN STUFF");
+		try {
+			Protocol tmp = new Protocol(this);
+			tmp.select(this.id);
+			String oldRepr = tmp.toString();
+
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("update gibdd_system_db.protocols set "
+								+ "date=?, "
+								+ "violation_id=?, "
+								+ "vehicle_id=?, "
+								+ "patrol_inspector_id=? "
+								//+ "human_id=? "
+								+ "where protocol_id = "
+								+ Integer.toString(this.id));
+				stmt.setDate(1, this.date);
+				stmt.setInt(2, this.violation.getId());
+				stmt.setInt(3, this.vehicle.getId());
+				stmt.setInt(4, this.patrolInspector.getBaseId());
+				//stmt.setInt(5, this.human.getId());
+
+				stmt.executeUpdate();
+
+				System.out
+						.println("...Row in base with string representation \n\t"
+								+ oldRepr
+								+ "\nwas updated to\n\t"
+								+ this.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void delete() {
-		// TODO implement database delete operation
-		throw new UnsupportedOperationException("not implemented");
+		Human h = null;
+		if (h == null)
+			throw new UnsupportedOperationException("ADD HUMAN STUFF");
+		try {
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("delete from gibdd_system_db.protocols where protocol_id = "
+								+ Integer.toString(this.id));
+				stmt.executeUpdate();
+
+				System.out.println("...Row with string representation \n\t"
+						+ this.toString() + "\nwas deleted from base");
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void select(int id) {
-		// TODO implement database select operation
-		throw new UnsupportedOperationException("not implemented");
+		Human h = null;
+		if (h == null)
+			throw new UnsupportedOperationException("ADD HUMAN STUFF");
+		try {
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("select protocol_id, date, "
+								+ "violation_id, patrol_inspectors.inspector_id, vehicle_id "
+								+ "from gibdd_system_db.protocols, gibdd_system_db.patrol_inspectors "
+								+ "where protocol_id = "
+								+ Integer.toString(id)
+								+ " and "
+								+ "patrol_inspectors.patrol_inspector_id = protocols.patrol_inspector_id");
+				ResultSet res = stmt.executeQuery();
+
+				while (res.next()) {
+					this.id = res.getInt(1);
+					this.date = res.getDate(2);
+					this.violation.select(res.getInt(3));
+					this.patrolInspector.select(res.getInt(4));
+					this.vehicle.select(res.getInt(5));
+					// this.human.select(res.getInt(6));
+				}
+
+				System.out.println("...Row with string representation \n\t"
+						+ this.toString() + "\nwas selected from base");
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public String toString() {
-		// TODO implement string representation of the object
-		throw new UnsupportedOperationException("not implemented");
+		StringBuilder sb = new StringBuilder();
+		sb.append("id = " + this.id + ", ");
+		sb.append("human = " + this.human.toString() + ", ");
+		sb.append("date = " + this.date + ", ");
+		sb.append("violation = " + this.violation.toString() + ", ");
+		sb.append("patrol_inspector = " + this.patrolInspector.toString()
+				+ ", ");
+		sb.append("vehicle = " + this.vehicle);
+		return sb.toString();
 	}
 
 	/**
@@ -159,7 +297,7 @@ public class Protocol extends DBObject {
 	 * @param vehicle
 	 */
 	public void setVehicle(Vehicle vehicle) {
-		this.velicle = vehicle;
+		this.vehicle = vehicle;
 	}
 
 	/**
@@ -168,7 +306,7 @@ public class Protocol extends DBObject {
 	 * @return
 	 */
 	public Vehicle getVehicle() {
-		return this.velicle;
+		return this.vehicle;
 	}
 
 	/**
