@@ -1,6 +1,10 @@
 ﻿package model;
 
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 /**
  * VehicleRegistrationSertificate Класс свидетельство о регистрации. Содержит
@@ -126,9 +130,12 @@ public class VehicleRegistrationCertificate extends DBObject {
 		this.vehicle = new Vehicle(vehicleRegistrationCertificate.vehicle);
 		this.human = new Human(vehicleRegistrationCertificate.human);
 		this.registrationNumber = vehicleRegistrationCertificate.registrationNumber;
-		this.registrationDate = new Date(vehicleRegistrationCertificate.registrationDate.getTime());
-		this.leaveDate = new Date(vehicleRegistrationCertificate.leaveDate.getTime());
-		this.vehicleInspector = new VehicleInspector(vehicleRegistrationCertificate.vehicleInspector);
+		this.registrationDate = new Date(
+				vehicleRegistrationCertificate.registrationDate.getTime());
+		this.leaveDate = new Date(
+				vehicleRegistrationCertificate.leaveDate.getTime());
+		this.vehicleInspector = new VehicleInspector(
+				vehicleRegistrationCertificate.vehicleInspector);
 	}
 
 	/**
@@ -136,32 +143,172 @@ public class VehicleRegistrationCertificate extends DBObject {
 	 */
 	@Override
 	public void insert() {
-		// TODO implement database insert operation
-		throw new UnsupportedOperationException("not implemented");
+		Human h = null;
+		if (h == null)
+			throw new UnsupportedOperationException("ADD HUMAN STUFF");
+		try {
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement(
+								"insert into gibdd_system_db.vehicle_registration_certificates "
+										+ "(vehicle_registration_certificate_id, registration_date, "
+										+ "leave_date, registration_number, vehicle_inspector_id, "
+										+ "vehicle_id)"
+										+ "values (default, ?, ?, ?, ?, ?)",
+								Statement.RETURN_GENERATED_KEYS);
+				stmt.setDate(1, this.registrationDate);
+				stmt.setDate(2, this.leaveDate);
+				stmt.setString(3, this.registrationNumber);
+				stmt.setInt(4, this.vehicleInspector.getBaseId());
+				stmt.setInt(5, this.vehicle.getId());
+
+				stmt.executeUpdate();
+
+				ResultSet key = stmt.getGeneratedKeys();
+				key.next();
+				this.id = key.getInt(1);
+
+				System.out.println("...Row with string representation \n\t"
+						+ this.toString() + "\nwas added");
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void update() {
-		// TODO implement database update operation
-		throw new UnsupportedOperationException("not implemented");
+		Human h = null;
+		if (h == null)
+			throw new UnsupportedOperationException("ADD HUMAN STUFF");
+		try {
+			VehicleRegistrationCertificate tmp = new VehicleRegistrationCertificate(
+					this);
+			tmp.select(this.id);
+			String oldRepr = tmp.toString();
+
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("update gibdd_system_db.vehicle_registration_certificates set "
+								+ "registration_date=?, "
+								+ "leave_date=?, "
+								+ "registration_number=?, vehicle_inspector_id=?, "
+								+ "vehicle_id=? "
+								+ "where vehicle_registration_certificate_id = "
+								+ Integer.toString(this.id));
+				stmt.setDate(1, this.registrationDate);
+				stmt.setDate(2, this.leaveDate);
+				stmt.setString(3, this.registrationNumber);
+				stmt.setInt(4, this.vehicleInspector.getBaseId());
+				stmt.setInt(5, this.vehicle.getId());
+
+				stmt.executeUpdate();
+
+				System.out
+						.println("...Row in base with string representation \n\t"
+								+ oldRepr
+								+ "\nwas updated to\n\t"
+								+ this.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void delete() {
-		// TODO implement database delete operation
-		throw new UnsupportedOperationException("not implemented");
+		Human h = null;
+		if (h == null)
+			throw new UnsupportedOperationException("ADD HUMAN STUFF");
+		try {
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("delete from gibdd_system_db.vehicle_registration_certificates "
+								+ "where vehicle_registration_certificate_id = "
+								+ Integer.toString(this.id));
+				stmt.executeUpdate();
+
+				System.out.println("...Row with string representation \n\t"
+						+ this.toString() + "\nwas deleted from base");
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void select(int id) {
-		// TODO implement database select operation
-		throw new UnsupportedOperationException("not implemented");
+		Human h = null;
+		if (h == null)
+			throw new UnsupportedOperationException("ADD HUMAN STUFF");
+		try {
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("select vehicle_registration_certificate_id, "
+								+ "registration_date, leave_date, registration_number, "
+								+ "vehicle_inspectors.inspector_id, vehicle_id "
+								+ "from gibdd_system_db.vehicle_registration_certificates, "
+								+ "gibdd_system_db.vehicle_inspectors "
+								+ "where vehicle_registration_certificate_id = "
+								+ Integer.toString(id)
+								+ " and "
+								+ "vehicle_inspectors.vehicle_inspector_id = vehicle_registration_certificates.vehicle_inspector_id");
+				ResultSet res = stmt.executeQuery();
+
+				while (res.next()) {
+					this.id = res.getInt(1);
+					this.registrationDate = res.getDate(2);
+					this.leaveDate = res.getDate(3);
+					this.registrationNumber = res.getString(4);
+					this.vehicleInspector.select(res.getInt(5));
+					this.vehicle.select(res.getInt(6));
+				}
+
+				System.out.println("...Row with string representation \n\t"
+						+ this.toString() + "\nwas selected from base");
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public String toString() {
-		// TODO implement string representation of the object
-		throw new UnsupportedOperationException("not implemented");
+		StringBuilder sb = new StringBuilder();
+		sb.append("id = " + this.id + ", ");
+		sb.append("human = " + this.human + ", ");
+		sb.append("registration_number = " + this.registrationNumber + ", ");
+		sb.append("registration_date = " + this.registrationDate + ", ");
+		sb.append("leave_date = " + this.leaveDate + ", ");
+		sb.append("vehicle_inspector = " + this.vehicleInspector.toString()
+				+ ", ");
+		sb.append("vehicle = " + this.vehicle);
+		return sb.toString();
 	}
 
 	/**
