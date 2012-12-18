@@ -119,7 +119,7 @@ public class PatrolInspector extends Inspector implements Runnable {
 			EarthCoordinates coordinates, boolean running) {
 		super(name, passportNumber, address, rank, post, login, password);
 		this.queue = new LinkedList<Protocol>();
-		this.coordinates = coordinates;
+		this.coordinates = new EarthCoordinates(coordinates);
 		this.running = running;
 	}
 

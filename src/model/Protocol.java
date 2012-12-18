@@ -102,11 +102,11 @@ public class Protocol extends DBObject {
 	 */
 	public Protocol(Human human, Violation violation, Date date,
 			Vehicle vehicle, PatrolInspector patrolInspector) {
-		this.human = human;
-		this.violation = violation;
-		this.date = date;
-		this.vehicle = vehicle;
-		this.patrolInspector = patrolInspector;
+		this.human = new Human(human);
+		this.violation = new Violation(violation);
+		this.date = new Date(date.getTime());
+		this.vehicle = new Vehicle(vehicle);
+		this.patrolInspector = new PatrolInspector(patrolInspector);
 	}
 
 	/**
@@ -117,6 +117,7 @@ public class Protocol extends DBObject {
 	 * @param protocol
 	 */
 	public Protocol(Protocol protocol) {
+		this.id = protocol.id;
 		this.human = new Human(protocol.human);
 		this.violation = new Violation(protocol.violation);
 		this.vehicle = new Vehicle(protocol.vehicle);

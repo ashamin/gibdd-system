@@ -109,12 +109,12 @@ public class VehicleRegistrationCertificate extends DBObject {
 	public VehicleRegistrationCertificate(Vehicle vehicle, Human human,
 			String registrationNumber, Date registrationDate, Date leaveDate,
 			VehicleInspector vehicleInspector) {
-		this.vehicle = vehicle;
-		this.human = human;
+		this.vehicle = new Vehicle(vehicle);
+		this.human = new Human(human);
 		this.registrationNumber = registrationNumber;
-		this.registrationDate = registrationDate;
-		this.leaveDate = leaveDate;
-		this.vehicleInspector = vehicleInspector;
+		this.registrationDate = new Date(registrationDate.getTime());
+		this.leaveDate = new Date(leaveDate.getTime());
+		this.vehicleInspector = new VehicleInspector(vehicleInspector);
 	}
 
 	/**
@@ -127,6 +127,7 @@ public class VehicleRegistrationCertificate extends DBObject {
 	 */
 	public VehicleRegistrationCertificate(
 			VehicleRegistrationCertificate vehicleRegistrationCertificate) {
+		this.id = vehicleRegistrationCertificate.id;
 		this.vehicle = new Vehicle(vehicleRegistrationCertificate.vehicle);
 		this.human = new Human(vehicleRegistrationCertificate.human);
 		this.registrationNumber = vehicleRegistrationCertificate.registrationNumber;

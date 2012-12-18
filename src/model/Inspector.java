@@ -118,6 +118,7 @@ public class Inspector extends Human {
 	 */
 	public Inspector(Inspector inspector) {
 		super((Human) inspector);
+		this.id = inspector.id;
 		this.rank = inspector.rank;
 		this.post = inspector.post;
 		this.login = inspector.login;

@@ -93,8 +93,8 @@ public class AutomaticRecorder extends DBObject implements Runnable {
 	public AutomaticRecorder(String UID, EarthCoordinates coordinates,
 			DutyTour dutyTour, boolean running) {
 		this.UID = UID;
-		this.coordinates = coordinates;
-		this.dutyTour = dutyTour;
+		this.coordinates = new EarthCoordinates(coordinates);
+		this.dutyTour = new DutyTour(dutyTour);
 		this.running = running;
 	}
 
@@ -106,6 +106,7 @@ public class AutomaticRecorder extends DBObject implements Runnable {
 	 * @param recorder
 	 */
 	public AutomaticRecorder(AutomaticRecorder recorder) {
+		this.id = recorder.id;
 		this.UID = recorder.UID;
 		this.coordinates = new EarthCoordinates(recorder.coordinates);
 		this.dutyTour = new DutyTour(recorder.dutyTour);

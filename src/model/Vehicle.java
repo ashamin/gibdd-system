@@ -112,6 +112,7 @@ public class Vehicle extends DBObject {
 	 * @param vehicle
 	 */
 	public Vehicle(Vehicle vehicle) {
+		this.id = vehicle.id;
 		this.VIN = vehicle.VIN;
 		this.EIN = vehicle.EIN;
 		this.color = vehicle.color;

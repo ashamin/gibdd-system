@@ -90,6 +90,7 @@ public class Violation extends DBObject {
 	 * @param violation
 	 */
 	public Violation(Violation violation) {
+		this.id = violation.id;
 		this.title = violation.title;
 		this.description = violation.description;
 		this.punishment = violation.punishment;

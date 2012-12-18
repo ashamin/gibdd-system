@@ -103,10 +103,10 @@ public class DriverLicense extends DBObject {
 	 */
 	public DriverLicense(Human human, DriverLicenseInspector inspector,
 			Date registrationDate, Date leaveDate, String categories) {
-		this.human = human;
-		this.inspector = inspector;
-		this.registrationDate = registrationDate;
-		this.leaveDate = leaveDate;
+		this.human = new Human(human);
+		this.inspector = new DriverLicenseInspector(inspector);
+		this.registrationDate = new Date(registrationDate.getTime());
+		this.leaveDate = new Date(leaveDate.getTime());
 		this.categories = categories;
 	}
 

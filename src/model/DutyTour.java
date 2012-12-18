@@ -102,11 +102,26 @@ public class DutyTour extends DBObject {
 	public DutyTour(Set<PatrolInspector> patrolInspectors,
 			Set<AutomaticRecorder> recorders, DutyInspector dutyInspector,
 			Date startDate, Date finishDate) {
-		this.patrolInspectors = patrolInspectors;
-		this.automaticRecorders = recorders;
-		this.dutyInspector = dutyInspector;
-		this.startDate = startDate;
-		this.finishDate = finishDate;
+		
+		DBObject tmp;
+		this.patrolInspectors = new HashSet<PatrolInspector>();
+		this.automaticRecorders = new HashSet<AutomaticRecorder>();
+		
+		Iterator<PatrolInspector> itp = patrolInspectors.iterator();
+		while(itp.hasNext()){
+			tmp = itp.next();
+			this.patrolInspectors.add(new PatrolInspector((PatrolInspector)tmp));
+		}
+		
+		Iterator<AutomaticRecorder> ita = automaticRecorders.iterator();
+		while(ita.hasNext()){
+			tmp = ita.next();
+			this.automaticRecorders.add(new AutomaticRecorder((AutomaticRecorder)tmp));
+		}
+		
+		this.dutyInspector = new DutyInspector(dutyInspector);
+		this.startDate = new Date(startDate.getTime());
+		this.finishDate = new Date(finishDate.getTime());
 	}
 
 	/**
@@ -117,6 +132,8 @@ public class DutyTour extends DBObject {
 	 * @param dutyTour
 	 */
 	public DutyTour(DutyTour dutyTour) {
+		this.id = dutyTour.id;
+		
 		DBObject tmp;
 		this.patrolInspectors = new HashSet<PatrolInspector>();
 		this.automaticRecorders = new HashSet<AutomaticRecorder>();
