@@ -129,23 +129,20 @@ public class Protocol extends DBObject {
 	 */
 	@Override
 	public void insert() {
-		Human h = null;
-		if (h == null)
-			throw new UnsupportedOperationException("ADD HUMAN STUFF");
 		try {
 			Connection conn = this.getConnection();
 			try {
 				PreparedStatement stmt = conn
 						.prepareStatement(
 								"insert into gibdd_system_db.protocols (protocol_id, date, "
-										+ "violation_id, patrol_inspector_id, vehicle_id) "
-										+ "values (default, ?, ?, ?, ?)",
+										+ "violation_id, patrol_inspector_id, vehicle_id, human_id) "
+										+ "values (default, ?, ?, ?, ?, ?)",
 								Statement.RETURN_GENERATED_KEYS);
 				stmt.setDate(1, this.date);
 				stmt.setInt(2, this.violation.getId());
 				stmt.setInt(3, this.patrolInspector.getBaseId());
 				stmt.setInt(4, this.vehicle.getId());
-				// stmt.setInt(5, this.human.getId());
+				stmt.setInt(5, this.human.getId());
 
 				stmt.executeUpdate();
 
@@ -168,9 +165,6 @@ public class Protocol extends DBObject {
 
 	@Override
 	public void update() {
-		Human h = null;
-		if (h == null)
-			throw new UnsupportedOperationException("ADD HUMAN STUFF");
 		try {
 			Protocol tmp = new Protocol(this);
 			tmp.select(this.id);
@@ -183,15 +177,15 @@ public class Protocol extends DBObject {
 								+ "date=?, "
 								+ "violation_id=?, "
 								+ "vehicle_id=?, "
-								+ "patrol_inspector_id=? "
-								//+ "human_id=? "
+								+ "patrol_inspector_id=?, "
+								+ "human_id=? "
 								+ "where protocol_id = "
 								+ Integer.toString(this.id));
 				stmt.setDate(1, this.date);
 				stmt.setInt(2, this.violation.getId());
 				stmt.setInt(3, this.vehicle.getId());
 				stmt.setInt(4, this.patrolInspector.getBaseId());
-				//stmt.setInt(5, this.human.getId());
+				stmt.setInt(5, this.human.getId());
 
 				stmt.executeUpdate();
 
@@ -213,9 +207,6 @@ public class Protocol extends DBObject {
 
 	@Override
 	public void delete() {
-		Human h = null;
-		if (h == null)
-			throw new UnsupportedOperationException("ADD HUMAN STUFF");
 		try {
 			Connection conn = this.getConnection();
 			try {
@@ -239,15 +230,12 @@ public class Protocol extends DBObject {
 
 	@Override
 	public void select(int id) {
-		Human h = null;
-		if (h == null)
-			throw new UnsupportedOperationException("ADD HUMAN STUFF");
 		try {
 			Connection conn = this.getConnection();
 			try {
 				PreparedStatement stmt = conn
 						.prepareStatement("select protocol_id, date, "
-								+ "violation_id, patrol_inspectors.inspector_id, vehicle_id "
+								+ "violation_id, patrol_inspectors.inspector_id, vehicle_id, human_id "
 								+ "from gibdd_system_db.protocols, gibdd_system_db.patrol_inspectors "
 								+ "where protocol_id = "
 								+ Integer.toString(id)
@@ -261,7 +249,7 @@ public class Protocol extends DBObject {
 					this.violation.select(res.getInt(3));
 					this.patrolInspector.select(res.getInt(4));
 					this.vehicle.select(res.getInt(5));
-					// this.human.select(res.getInt(6));
+					this.human.select(res.getInt(6));
 				}
 
 				System.out.println("...Row with string representation \n\t"

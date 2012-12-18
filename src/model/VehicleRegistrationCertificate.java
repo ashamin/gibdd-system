@@ -143,9 +143,6 @@ public class VehicleRegistrationCertificate extends DBObject {
 	 */
 	@Override
 	public void insert() {
-		Human h = null;
-		if (h == null)
-			throw new UnsupportedOperationException("ADD HUMAN STUFF");
 		try {
 			Connection conn = this.getConnection();
 			try {
@@ -154,14 +151,15 @@ public class VehicleRegistrationCertificate extends DBObject {
 								"insert into gibdd_system_db.vehicle_registration_certificates "
 										+ "(vehicle_registration_certificate_id, registration_date, "
 										+ "leave_date, registration_number, vehicle_inspector_id, "
-										+ "vehicle_id)"
-										+ "values (default, ?, ?, ?, ?, ?)",
+										+ "vehicle_id, human_id)"
+										+ "values (default, ?, ?, ?, ?, ?, ?)",
 								Statement.RETURN_GENERATED_KEYS);
 				stmt.setDate(1, this.registrationDate);
 				stmt.setDate(2, this.leaveDate);
 				stmt.setString(3, this.registrationNumber);
 				stmt.setInt(4, this.vehicleInspector.getBaseId());
 				stmt.setInt(5, this.vehicle.getId());
+				stmt.setInt(6, this.human.getId());
 
 				stmt.executeUpdate();
 
@@ -184,9 +182,6 @@ public class VehicleRegistrationCertificate extends DBObject {
 
 	@Override
 	public void update() {
-		Human h = null;
-		if (h == null)
-			throw new UnsupportedOperationException("ADD HUMAN STUFF");
 		try {
 			VehicleRegistrationCertificate tmp = new VehicleRegistrationCertificate(
 					this);
@@ -200,7 +195,7 @@ public class VehicleRegistrationCertificate extends DBObject {
 								+ "registration_date=?, "
 								+ "leave_date=?, "
 								+ "registration_number=?, vehicle_inspector_id=?, "
-								+ "vehicle_id=? "
+								+ "vehicle_id=?, human_id=? "
 								+ "where vehicle_registration_certificate_id = "
 								+ Integer.toString(this.id));
 				stmt.setDate(1, this.registrationDate);
@@ -208,6 +203,7 @@ public class VehicleRegistrationCertificate extends DBObject {
 				stmt.setString(3, this.registrationNumber);
 				stmt.setInt(4, this.vehicleInspector.getBaseId());
 				stmt.setInt(5, this.vehicle.getId());
+				stmt.setInt(6, this.human.getId());
 
 				stmt.executeUpdate();
 
@@ -229,9 +225,6 @@ public class VehicleRegistrationCertificate extends DBObject {
 
 	@Override
 	public void delete() {
-		Human h = null;
-		if (h == null)
-			throw new UnsupportedOperationException("ADD HUMAN STUFF");
 		try {
 			Connection conn = this.getConnection();
 			try {
@@ -256,16 +249,13 @@ public class VehicleRegistrationCertificate extends DBObject {
 
 	@Override
 	public void select(int id) {
-		Human h = null;
-		if (h == null)
-			throw new UnsupportedOperationException("ADD HUMAN STUFF");
 		try {
 			Connection conn = this.getConnection();
 			try {
 				PreparedStatement stmt = conn
 						.prepareStatement("select vehicle_registration_certificate_id, "
 								+ "registration_date, leave_date, registration_number, "
-								+ "vehicle_inspectors.inspector_id, vehicle_id "
+								+ "vehicle_inspectors.inspector_id, vehicle_id, human_id "
 								+ "from gibdd_system_db.vehicle_registration_certificates, "
 								+ "gibdd_system_db.vehicle_inspectors "
 								+ "where vehicle_registration_certificate_id = "
@@ -281,6 +271,7 @@ public class VehicleRegistrationCertificate extends DBObject {
 					this.registrationNumber = res.getString(4);
 					this.vehicleInspector.select(res.getInt(5));
 					this.vehicle.select(res.getInt(6));
+					this.vehicle.select(res.getInt(7));
 				}
 
 				System.out.println("...Row with string representation \n\t"
