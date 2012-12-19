@@ -8,23 +8,21 @@
 </head>
 <body>
 	<div>
+		<h1>Вход в систему</h1>
 		<form name="login" method="post" action="login">
-			<fieldset>
-				<legend>Вход в систему</legend>
-				<table>
-					<tr>
-						<td>Имя пользователя:</td>
-						<td><input type="text" name="login"></td>
-					</tr>
-					<tr>
-						<td>Пароль:</td>
-						<td><input type="password" name="password"></td>
-					</tr>
-					<tr>
-						<td><input type="submit" value="Вход"></td>
-					</tr>
-				</table>
-			</fieldset>
+			<table>
+				<tr>
+					<td>Имя пользователя:</td>
+					<td><input type="text" name="login"></td>
+				</tr>
+				<tr>
+					<td>Пароль:</td>
+					<td><input type="password" name="password"></td>
+				</tr>
+			</table>
+			<p>
+				<input type="submit" value="Вход">
+			</p>
 		</form>
 		<%
 			String loginError = (String) session.getAttribute("login-error");

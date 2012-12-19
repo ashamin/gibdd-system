@@ -9,13 +9,21 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<%
+	Inspector inspector = (Inspector) session.getAttribute("inspector");
+
+	// If patrol inspector sign in, than update workspace page every 5 seconds
+	if (inspector instanceof PatrolInspector) {
+%>
+<meta http-equiv="refresh" content="5">
+<%
+	}
+%>
 <title>Информационная система ГИБДД: Рабочее пространство
 	инспектора</title>
 </head>
 <body>
 	<%
-		Inspector inspector = (Inspector) session.getAttribute("inspector");
-
 		if (inspector instanceof DriverLicenseInspector) {
 			DriverLicenseInspector driverLicenseInspector = (DriverLicenseInspector) inspector;
 	%>
@@ -30,17 +38,36 @@
 	</div>
 	<!-- Main div -->
 	<div>
-		<form name="LicenseInspector_main">
-			<fieldset>
-				<legend>Меню</legend>
-				<table>
-					<tr>
-						<td><input type="button"
-							value="Новое водительское удостоверение" style='width: 100%'
-							onclick="location.href='#'"></td>
-					</tr>
-				</table>
-			</fieldset>
+		<h1>Водительские удостоверения</h1>
+		<form>
+			<!-- Table Driver Licenses -->
+			<table border="1">
+				<tr>
+					<th></th>
+					<th>№</th>
+					<th>ФИО</th>
+					<th>Серия/номер паспорта</th>
+					<th>Адрес</th>
+					<th>Дата выдачи</th>
+					<th>Дата истечения срока удостоверения</th>
+					<th>Категории</th>
+				</tr>
+
+				<%
+					// TODO: implement for-loop over all driver licenses
+				%>
+				<tr>
+					<td><input type="button" value="Ред."
+						onclick="location.href='driver-license-form.jsp?id='"></td>
+				</tr>
+				<%
+					// End of for-loop
+				%>
+			</table>
+			<p>
+				<input type="button" value="Новое водительское удостоверение"
+					onclick="location.href='driver-license-form.jsp'">
+			</p>
 		</form>
 	</div>
 
@@ -59,27 +86,33 @@
 	</div>
 	<!-- Main div -->
 	<div>
-		<form name="DutyInspector_main">
-			<fieldset>
-				<legend>Меню</legend>
-				<table>
-					<tr>
-						<td colspan="2"><input type="button"
-							value="Просмотреть наряд" style='width: 100%'
-							onclick="location.href='view-duty-tour.jsp'"></td>
-					</tr>
-					<tr>
-						<td colspan="2"><input type="button" value="Добавить наряд"
-							style='width: 100%' onclick="location.href='#'"></td>
-					</tr>
-					<tr>
-						<td><input type="submit" value="Запустить наряд"
-							style='width: 100%'></td>
-						<td><input type="submit" value="Остановить наряд"
-							style='width: 100%'></td>
-					</tr>
-				</table>
-			</fieldset>
+		<h1>Наряды</h1>
+		<form>
+			<table border="1">
+				<tr>
+					<th></th>
+					<th>№</th>
+					<th>Назначенные инспекторы</th>
+					<th>Автоматические регистраторы</th>
+					<th>Дата начала</th>
+					<th>Дата окончания</th>
+					<th>Состояние</th>
+				</tr>
+				<%
+					// TODO: Implement for-loop over all duty tours
+				%>
+				<tr>
+					<td><input type="button" value="Ред."
+						onclick="location.href='duty-tour-form.jsp?id='"></td>
+				</tr>
+				<%
+					// End of for-loop
+				%>
+			</table>
+			<p>
+				<input type="button" value="Новый наряд"
+					onclick="location.href='duty-tour-form.jsp'" />
+			</p>
 		</form>
 	</div>
 	<%
@@ -97,24 +130,40 @@
 	</div>
 	<!-- Main div -->
 	<div>
-		<form name="PatrolInspector_main">
-			<fieldset>
-				<legend>Меню</legend>
-				<table>
-					<tr>
-						<td>Протоколов в очереди:</td>
-						<td>??????????????</td>
-					</tr>
-					<tr>
-						<td colspan="2"><input type="button" style='width: 100%'
-							value="Заполнить следующий протокол" onclick="location.href='#'"></td>
-					</tr>
-					<tr>
-						<td colspan="2"><input type="button" style='width: 100%'
-							value="Просмотреть протокол" onclick="location.href='#'"></td>
-					</tr>
-				</table>
-			</fieldset>
+		<h1>Протоколы</h1>
+		<form>
+			<table border="1">
+				<tr>
+					<th></th>
+					<th>№</th>
+					<th>ФИО</th>
+					<th>Номер кузова</th>
+					<th>Номер двигателя</th>
+					<th>Цвет</th>
+					<th>Марка</th>
+					<th>Год выпуска</th>
+					<th>Тип нарушения</th>
+					<th>Действия</th>
+					<th>Ответственность</th>
+					<th>Дата</th>
+					<th>Регистрационный номер</th>
+					<th>Состояние</th>
+				</tr>
+				<%
+					// TODO: Implement for-loop over all protocols
+				%>
+				<tr>
+					<td><input type="button" value="Ред."
+						onclick="location.href='protocol-form.jsp?id='"></td>
+				</tr>
+				<%
+					// End of for-loop
+				%>
+			</table>
+			<p>
+				<input type="button" value="Новый протокол"
+					onclick="location.href='protocol-form.jsp'" />
+			</p>
 		</form>
 	</div>
 	<%
@@ -132,17 +181,39 @@
 	</div>
 	<!-- Main div  -->
 	<div>
-		<form name="VehicleInspector_main">
-			<fieldset>
-				<legend>Меню</legend>
-				<table>
-					<tr>
-						<td><input type="button"
-							value="Новое свидетельство о регистрации" style='width: 100%'
-							onclick="location.href='#'"></td>
-					</tr>
-				</table>
-			</fieldset>
+		<h1>Транспортные средства</h1>
+		<form>
+			<table border="1">
+				<tr>
+					<th></th>
+					<th>№</th>
+					<th>ФИО</th>
+					<th>Серия/номер паспорта</th>
+					<th>Адрес</th>
+					<th>Номер кузова</th>
+					<th>Номер двигателя</th>					
+					<th>Цвет</th>
+					<th>Марка</th>
+					<th>Год выпуска</th>
+					<th>Регистрационный номер</th>
+					<th>Дата постановки на учет</th>
+					<th>Дата снятия с учета</th>
+				</tr>
+				<%
+					// TODO: Implement for-loop over all vehicle registration certificates
+				%>
+				<tr>
+					<td><input type="button" value="Ред."
+						onclick="location.href='vehicle-registration-certificate-form.jsp?id='"></td>
+				</tr>
+				<%
+					// End of for-loop
+				%>
+			</table>
+			<p>
+				<input type="button" value="Новое свидетельство о регистрации"
+					onclick="location.href='vehicle-registration-certificate-form.jsp'">
+			</p>
 		</form>
 	</div>
 	<%
