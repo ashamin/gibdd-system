@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * DriverLicense Класс водительское удостоверение. Содержит всю информацию о
@@ -121,7 +123,8 @@ public class DriverLicense extends DBObject {
 		this.id = driverLicense.id;
 		this.human = new Human(driverLicense.human);
 		this.inspector = new DriverLicenseInspector(driverLicense.inspector);
-		this.registrationDate = new Date(driverLicense.registrationDate.getTime());
+		this.registrationDate = new Date(
+				driverLicense.registrationDate.getTime());
 		this.leaveDate = new Date(driverLicense.registrationDate.getTime());
 		this.categories = driverLicense.categories;
 	}
@@ -286,6 +289,51 @@ public class DriverLicense extends DBObject {
 			e.printStackTrace();
 		}
 
+	}
+
+	/**
+	 * @return контейнер типа HashSet в котором содержатся объекты, хранящиеся в
+	 *         таблице driver_licenses базы данных
+	 */
+	public static Set<DriverLicense> selectDriverLicenses() {
+		Set<DriverLicense> driverLicenses = new HashSet<DriverLicense>();
+		DriverLicense dl = new DriverLicense();
+		try {
+			Connection conn = dl.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("select driver_license_id, registration_date, leave_date, categories, "
+								+ "driver_license_inspectors.inspector_id, human_id "
+								+ "from gibdd_system_db.driver_licenses, gibdd_system_db.driver_license_inspectors "
+								+ "where "
+								+ "driver_license_inspectors.driver_license_inspector_id = driver_licenses.driver_license_inspector_id");
+				ResultSet res = stmt.executeQuery();
+
+				while (res.next()) {
+					dl.id = res.getInt(1);
+					dl.registrationDate = res.getDate(2);
+					dl.leaveDate = res.getDate(3);
+					dl.categories = res.getString(4);
+					dl.inspector.select(res.getInt(5));
+					dl.human.select(res.getInt(6));
+
+					driverLicenses.add(new DriverLicense(dl));
+				}
+
+				/*System.out.println("...Row with string representation \n\t"
+						+ dl.toString() + "\nwas selected from base");*/
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return driverLicenses;
 	}
 
 	@Override

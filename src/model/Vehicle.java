@@ -5,6 +5,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Класс транспортного средства. Содержит информацию о транспортном средстве. К
@@ -278,6 +280,39 @@ public class Vehicle extends DBObject {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * @return контейнер типа HashSet в котором содержатся объекты, хранящиеся в
+	 *         таблице brands базы данных
+	 */
+	public static Set<String> selectBrands(){
+		Set<String> brands = new HashSet<String>();
+		Vehicle vehicle = new Vehicle();
+		
+		try {
+			Connection conn = vehicle.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("select brand from gibdd_system_db.brands");
+				ResultSet res = stmt.executeQuery();
+
+				while (res.next()) {
+					brands.add(res.getString(1));
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		
+		return brands;
 	}
 
 	@Override
