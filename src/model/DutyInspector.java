@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -330,6 +332,45 @@ public class DutyInspector extends Inspector {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * @return контейнер типа ArrayList в котором содержатся объекты, хранящиеся
+	 *         в таблице protocols базы данных
+	 */
+	public List<DutyTour> selectDutyTours() {
+		List<DutyTour> dutyTours = new ArrayList<DutyTour>();
+
+		try {
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("select duty_tour_id from duty_tours");
+				ResultSet res = stmt.executeQuery();
+
+				while (res.next()) {
+					DutyTour p = new DutyTour();
+					p.select(res.getInt(1));
+					dutyTours.add(new DutyTour(p));
+				}
+
+				/*
+				 * System.out.println("...Row with string representation \n\t" +
+				 * p.toString() + "\nwas selected from base");
+				 */
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return dutyTours;
+	}
+
 
 	@Override
 	public String toString() {
