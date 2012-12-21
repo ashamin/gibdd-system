@@ -5,8 +5,6 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Protocol Класс протокол. Содержит всю информацию о нарушении, человеке,
@@ -268,55 +266,7 @@ public class Protocol extends DBObject {
 			e.printStackTrace();
 		}
 	}
-
-	/**
-	 * @return контейнер типа HashSet в котором содержатся объекты, хранящиеся в
-	 *         таблице protocols базы данных
-	 */
-	public static Set<Protocol> selectProtocols() {
-		Set<Protocol> protocols = new HashSet<Protocol>();
-		Protocol p = new Protocol();
-
-		try {
-			Connection conn = p.getConnection();
-			try {
-				PreparedStatement stmt = conn
-						.prepareStatement("select protocol_id, date, "
-								+ "violation_id, patrol_inspectors.inspector_id, vehicle_id, human_id "
-								+ "from gibdd_system_db.protocols, gibdd_system_db.patrol_inspectors "
-								+ "where "
-								+ "patrol_inspectors.patrol_inspector_id = protocols.patrol_inspector_id");
-				ResultSet res = stmt.executeQuery();
-
-				while (res.next()) {
-					p.id = res.getInt(1);
-					p.date = res.getDate(2);
-					p.violation.select(res.getInt(3));
-					p.patrolInspector.select(res.getInt(4));
-					p.vehicle.select(res.getInt(5));
-					p.human.select(res.getInt(6));
-
-					protocols.add(new Protocol(p));
-				}
-
-				/*
-				 * System.out.println("...Row with string representation \n\t" +
-				 * p.toString() + "\nwas selected from base");
-				 */
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				conn.close();
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return protocols;
-	}
-
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
