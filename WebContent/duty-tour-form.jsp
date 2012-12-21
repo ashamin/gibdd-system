@@ -8,6 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Информационная система ГИБДД: Рабочее пространство
 	инспектора</title>
+<link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
 	<%
@@ -17,17 +18,24 @@
 			DutyInspector dutyInspector = (DutyInspector) inspector;
 	%>
 	<!-- Top div -->
-	<div>
-		<p>
-			Пользователь:
-			<%=dutyInspector.getName()%>
-			| Должность: Дежурный инспектор | <a href="logout">Выход из
-				системы</a>
-		</p>
+	<div id="content_top">
+		<table border="0" width="100%">
+			<tr>
+				<td width="10%">Пользователь:</td>
+				<td width="30%"><%=dutyInspector.getName()%></td>
+				<td align="right"><a href="logout" class="href_style">Выход
+						из системы</a></td>
+			</tr>
+			<tr>
+				<td>Должность:</td>
+				<td>дежурный инспектор</td>
+			</tr>
+		</table>
 	</div>
+	<br>
 	<!-- Main div -->
-	<div>
-		<h1>Редактирование информации о наряде</h1>
+	<div id="content_middle">
+		<h1 class="title_align">Редактирование информации о наряде</h1>
 		<form>
 			<table>
 				<tr>
@@ -35,7 +43,7 @@
 				</tr>
 				<tr>
 					<td></td>
-					<td>
+					<td class="checkbox_style">
 						<%
 							// TODO: Implement for-loop over all inspectors
 						%> <input type="checkbox" name="" value="no"> <br /> <%
@@ -48,7 +56,7 @@
 				</tr>
 				<tr>
 					<td></td>
-					<td>
+					<td class="checkbox_style">
 						<%
 							// TODO: Implement for-loop over all automatic recorders
 						%> <input type="checkbox" name="" value="no"> <br /> <%
@@ -57,32 +65,32 @@
 					</td>
 				</tr>
 				<tr>
-					<td><b>Другая информация</b></td>
+					<td class="title_style"><b>Другая информация</b></td>
 				</tr>
 				<tr>
 					<td>Дата начала наряда:</td>
-					<td><input type="text" name="startDate" style='width: 100%'></td>
+					<td><input type="text" class="input_style" name="startDate"></td>
 				</tr>
 				<tr>
 					<td>Дата окончания наряда:</td>
-					<td><input type="text" name="finishDate" style='width: 100%'></td>
+					<td><input type="text" class="input_style" name="finishDate"></td>
 				</tr>
 			</table>
-			<p>
+			<p class="title_align">
 				<%
 					if (request.getParameter("id") == null) {
 				%>
-				<input type="button" value="Запустить">
+				<input type="button" class="button_style" value="Запустить">
 				<%
 					} else {
 				%>
-				<input type="button" value="Остановить"> <input
-					type="button" value="Обновить"> <input type="button"
-					value="Удалить">
+				<input type="button" class="button_style" value="Остановить">
+				<input type="button" class="button_style" value="Обновить">
+				<input type="button" class="button_style" value="Удалить">
 				<%
 					}
 				%>
-				<input type="button" value="Назад"
+				<input type="button" class="button_style" value="Назад"
 					onclick="location.href='workspace.jsp'">
 			</p>
 		</form>

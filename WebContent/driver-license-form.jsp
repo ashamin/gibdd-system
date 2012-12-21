@@ -10,6 +10,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Информационная система ГИБДД: Рабочее пространство
 	инспектора</title>
+<link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
 	<%
@@ -19,17 +20,25 @@
 			DriverLicenseInspector driverLicenseInspector = (DriverLicenseInspector) inspector;
 	%>
 	<!-- Top div -->
-	<div>
-		<p>
-			Пользователь:
-			<%=driverLicenseInspector.getName()%>
-			| Должность: Инспектор, выдающий права | <a href="logout">Выход
-				из системы</a>
-		</p>
+	<div id="content_top">
+		<table border="0" width="100%">
+			<tr>
+				<td width="10%">Пользователь:</td>
+				<td width="30%"><%=driverLicenseInspector.getName()%></td>
+				<td align="right"><a href="logout" class="href_style">Выход
+						из системы</a></td>
+			</tr>
+			<tr>
+				<td>Должность:</td>
+				<td>инспектор, выдающий права</td>
+			</tr>
+		</table>
 	</div>
+	<br>
 	<!-- Main div -->
-	<div>
-		<h1>Редактирование информации о водительском удостоверении</h1>
+	<div id="content_middle">
+		<h1 class="title_align">Редактирование информации о водительском
+			удостоверении</h1>
 		<%
 			DriverLicense driverLicense = new DriverLicense();
 
@@ -47,57 +56,58 @@
 		<form>
 			<table>
 				<tr>
-					<td><b>Информация о человеке</b></td>
+					<td class="title_style"><b>Информация о человеке</b></td>
 				</tr>
 				<tr>
 					<td>ФИО:</td>
-					<td><input type="text" name="name" style='width: 100%'
+					<td><input type="text" class="input_style" name="name"
 						value="<%=driverLicense.getHuman().getName()%>" /></td>
 				</tr>
 				<tr>
 					<td>Серия/номер паспорта:</td>
-					<td><input type="text" name="passportNumber"
-						style='width: 100%'
+					<td><input type="text" class="input_style"
+						name="passportNumber"
 						value="<%=driverLicense.getHuman().getPassportNumber()%>" /></td>
 				</tr>
 				<tr>
 					<td>Адрес:</td>
-					<td><textarea name="adress" cols="16" rows="1"><%=driverLicense.getHuman().getAddress()%></textarea></td>
+					<td><textarea name="adress" class="textarea_style" cols="16"
+							rows="1"><%=driverLicense.getHuman().getAddress()%></textarea></td>
 				</tr>
 				<tr>
-					<td><b>Другая информация</b></td>
+					<td class="title_style"><b>Другая информация</b></td>
 				</tr>
 				<tr>
 					<td>Дата выдачи удостоверения:</td>
-					<td><input type="text" name="registrationDate"
-						style='width: 100%'
+					<td><input type="text" class="input_style"
+						name="registrationDate"
 						value="<%=driverLicense.getRegistrationDate().toString()%>" /></td>
 				</tr>
 				<tr>
 					<td>Дата истечения срока удостоверения:</td>
-					<td><input type="text" name="leaveDate" style='width: 100%'
+					<td><input type="text" class="input_style" name="leaveDate"
 						value="<%=driverLicense.getLeaveDate().toString()%>" /></td>
 				</tr>
 				<tr>
 					<td>Категории:</td>
-					<td><input type="text" name="categories" style='width: 100%'
+					<td><input type="text" class="input_style" name="categories"
 						value="<%=driverLicense.getCategories()%>" /></td>
 				</tr>
 			</table>
-			<p>
+			<p class="title_align">
 				<%
 					if (driverLicense.getId() != DBObject.UNDEFINED_ID) {
 				%>
-				<input type="button" value="Обновить" /><input type="button"
-					value="Удалить" />
+				<input type="button" class="button_style" value="Обновить" /> <input
+					type="button" class="button_style" value="Удалить" />
 				<%
 					} else {
 				%>
-				<input type="button" value="Сохранить" />
+				<input type="button" class="button_style" value="Сохранить" />
 				<%
 					}
 				%>
-				<input type="button" value="Назад"
+				<input type="button" class="button_style" value="Назад"
 					onclick="location.href='workspace.jsp'" />
 			</p>
 		</form>

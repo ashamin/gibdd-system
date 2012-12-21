@@ -27,6 +27,7 @@
 %>
 <title>Информационная система ГИБДД: Рабочее пространство
 	инспектора</title>
+<link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
 	<%
@@ -34,20 +35,27 @@
 			DriverLicenseInspector driverLicenseInspector = (DriverLicenseInspector) inspector;
 	%>
 	<!-- Top div -->
-	<div>
-		<p>
-			Пользователь:
-			<%=driverLicenseInspector.getName()%>
-			| Должность: Инспектор, выдающий права | <a href="logout">Выход
-				из системы</a>
-		</p>
+	<div id="content_top">
+		<table border="0" width="100%">
+			<tr>
+				<td width="10%">Пользователь:</td>
+				<td width="30%"><%=driverLicenseInspector.getName()%></td>
+				<td align="right"><a href="logout" class="href_style">Выход
+						из системы</a></td>
+			</tr>
+			<tr>
+				<td>Должность:</td>
+				<td>инспектор, выдающий права</td>
+			</tr>
+		</table>
 	</div>
+	<br>
 	<!-- Main div -->
-	<div>
+	<div id="content_middle_main">
 		<h1>Водительские удостоверения</h1>
 		<form>
 			<!-- Table Driver Licenses -->
-			<table border="1">
+			<table class="formdata" border="1">
 				<tr>
 					<th></th>
 					<th>№</th>
@@ -66,7 +74,7 @@
 							Human human = driverLicense.getHuman();
 				%>
 				<tr>
-					<td><input type="button" value="Ред."
+					<td><input type="button" class="button_edit" value="Ред."
 						onclick="location.href='driver-license-form.jsp?id=<%=driverLicense.getId()%>'"></td>
 					<td><%=++i%></td>
 					<td><%=human.getName()%></td>
@@ -82,7 +90,9 @@
 
 			</table>
 			<p>
-				<input type="button" value="Новое водительское удостоверение"
+				<input type="button"
+					class="button_style_main_driver_license_vehicle"
+					value="Новое водительское удостоверение"
 					onclick="location.href='driver-license-form.jsp'">
 			</p>
 		</form>
@@ -93,20 +103,27 @@
 			DutyInspector dutyInspector = (DutyInspector) inspector;
 	%>
 	<!-- Top div -->
-	<div>
-		<p>
-			Пользователь:
-			<%=dutyInspector.getName()%>
-			| Должность: Дежурный инспектор | <a href="logout">Выход из
-				системы</a>
-		</p>
+	<div id="content_top">
+		<table border="0" width="100%">
+			<tr>
+				<td width="10%">Пользователь:</td>
+				<td width="30%"><%=dutyInspector.getName()%></td>
+				<td align="right"><a href="logout" class="href_style">Выход
+						из системы</a></td>
+			</tr>
+			<tr>
+				<td>Должность:</td>
+				<td>дежурный инспектор</td>
+			</tr>
+		</table>
 	</div>
+	<br>
 	<!-- Main div -->
-	<div>
+	<div id="content_middle_main">
 		<h1>Наряды</h1>
 		<form>
 			<!-- Table Duty Tours -->
-			<table border="1">
+			<table class="formdata" border="1">
 				<tr>
 					<th></th>
 					<th>№</th>
@@ -120,7 +137,7 @@
 					// TODO: Implement for-loop over all duty tours
 				%>
 				<tr>
-					<td><input type="button" value="Ред."
+					<td><input type="button" class="button_edit" value="Ред."
 						onclick="location.href='duty-tour-form.jsp?id='"></td>
 				</tr>
 				<%
@@ -128,8 +145,8 @@
 				%>
 			</table>
 			<p>
-				<input type="button" value="Новый наряд"
-					onclick="location.href='duty-tour-form.jsp'" />
+				<input type="button" class="button_style_main_duty_tour_protocol"
+					value="Новый наряд" onclick="location.href='duty-tour-form.jsp'" />
 			</p>
 		</form>
 	</div>
@@ -138,25 +155,32 @@
 			PatrolInspector patrolInspector = (PatrolInspector) inspector;
 	%>
 	<!-- Top div -->
-	<div>
-		<p>
-			Пользователь:
-			<%=patrolInspector.getName()%>
-			| Должность: Патрульный инспектор | <a href="logout">Выход из
-				системы</a>
-		</p>
+	<div id="content_top">
+		<table border="0" width="100%">
+			<tr>
+				<td width="10%">Пользователь:</td>
+				<td width="30%"><%=patrolInspector.getName()%></td>
+				<td align="right"><a href="logout" class="href_style">Выход
+						из системы</a></td>
+			</tr>
+			<tr>
+				<td>Должность:</td>
+				<td>патрульный инспектор</td>
+			</tr>
+		</table>
 	</div>
+	<br>
 	<!-- Main div -->
-	<div>
+	<div id="content_middle_main">
 		<h1>Протоколы</h1>
 		<form>
 			<!-- Table Protocols -->
-			<table border="1">
+			<table class="formdata" border="1">
 				<tr>
 					<th></th>
 					<th>№</th>
 					<th>ФИО</th>
-					<th>Регистрационный номер</th>
+					<th>Номер авто</th>
 					<th>Цвет</th>
 					<th>Марка</th>
 					<th>Тип нарушения</th>
@@ -174,7 +198,7 @@
 							Violation violation = protocol.getViolation();
 				%>
 				<tr>
-					<td><input type="button" value="Ред."
+					<td><input type="button" class="button_edit" value="Ред."
 						onclick="location.href='protocol-form.jsp?id=<%=protocol.getId()%>'"></td>
 					<td><%=++i%></td>
 					<td><%=human.getName()%></td>
@@ -192,8 +216,8 @@
 				%>
 			</table>
 			<p>
-				<input type="button" value="Новый протокол"
-					onclick="location.href='protocol-form.jsp'" />
+				<input type="button" class="button_style_main_duty_tour_protocol"
+					value="Новый протокол" onclick="location.href='protocol-form.jsp'" />
 			</p>
 		</form>
 	</div>
@@ -202,26 +226,31 @@
 			VehicleInspector vehicleInspector = (VehicleInspector) inspector;
 	%>
 	<!-- Top div -->
-	<div>
-		<p>
-			Пользователь:
-			<%=vehicleInspector.getName()%>
-			| Должность: Инспектор, оформляющий ТС | <a href="logout">Выход
-				из системы</a>
-		</p>
+	<div id="content_top">
+		<table border="0" width="100%">
+			<tr>
+				<td width="10%">Пользователь:</td>
+				<td width="30%"><%=vehicleInspector.getName()%></td>
+				<td align="right"><a href="logout" class="href_style">Выход
+						из системы</a></td>
+			</tr>
+			<tr>
+				<td>Должность:</td>
+				<td>инспектор, оформляющий ТС</td>
+			</tr>
+		</table>
 	</div>
+	<br>
 	<!-- Main div  -->
-	<div>
+	<div id="content_middle_main">
 		<h1>Транспортные средства</h1>
 		<form>
 			<!-- Table Vehicle Registration Sertificates -->
-			<table border="1">
+			<table class="formdata" border="1">
 				<tr>
 					<th></th>
 					<th>№</th>
 					<th>ФИО</th>
-					<th>Серия/номер паспорта</th>
-					<th>Адрес</th>
 					<th>Номер кузова</th>
 					<th>Номер двигателя</th>
 					<th>Цвет</th>
@@ -240,12 +269,10 @@
 							Vehicle vehicle = vrc.getVehicle();
 				%>
 				<tr>
-					<td><input type="button" value="Ред."
+					<td><input type="button" class="button_edit" value="Ред."
 						onclick="location.href='vehicle-registration-certificate-form.jsp?id=<%=vrc.getId()%>'"></td>
 					<td><%=++i%></td>
 					<td><%=human.getName()%></td>
-					<td><%=human.getPassportNumber()%></td>
-					<td><%=human.getAddress()%></td>
 					<td><%=vehicle.getVIN()%></td>
 					<td><%=vehicle.getEIN()%></td>
 					<td><%=vehicle.getColor()%></td>
@@ -261,7 +288,9 @@
 				%>
 			</table>
 			<p>
-				<input type="button" value="Новое свидетельство о регистрации"
+				<input type="button"
+					class="button_style_main_driver_license_vehicle"
+					value="Новое свидетельство о регистрации"
 					onclick="location.href='vehicle-registration-certificate-form.jsp'">
 			</p>
 		</form>

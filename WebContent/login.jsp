@@ -5,38 +5,36 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Информационная система ГИБДД: Вход в систему</title>
+<link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
-	<div>
+	<div id="content_login">
 		<h1>Вход в систему</h1>
 		<form method="post" action="login">
 			<table>
 				<tr>
 					<td>Имя пользователя:</td>
-					<td><input type="text" name="login"></td>
+					<td><input type="text" class="input_style" name="login"></td>
 				</tr>
 				<tr>
 					<td>Пароль:</td>
-					<td><input type="password" name="password"></td>
+					<td><input type="password" class="input_style" name="password"></td>
 				</tr>
 			</table>
 			<p>
-				<input type="submit" value="Вход">
+				<input type="submit" class="button_style" value="Вход">
 			</p>
 		</form>
-		<%
-			String loginError = (String) session.getAttribute("login-error");
-			if (loginError != null) {
-				session.setAttribute("login-error", null);
-		%>
-		<div>
-			<p>
-				Ошибка:
-				<%=loginError%></p>
-		</div>
-		<%
-			}
-		%>
 	</div>
+	<%
+		String loginError = (String) session.getAttribute("login-error");
+		if (loginError != null) {
+			session.setAttribute("login-error", null);
+	%>
+	<div class="error_login">Ошибка: введен неверный логин или
+		пароль!</div>
+	<%
+		}
+	%>
 </body>
 </html>

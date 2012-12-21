@@ -10,6 +10,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Информационная система ГИБДД: Рабочее пространство
 	инспектора</title>
+<link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
 	<%
@@ -19,17 +20,25 @@
 			VehicleInspector vehicleInspector = (VehicleInspector) inspector;
 	%>
 	<!-- Top div -->
-	<div>
-		<p>
-			Пользователь:
-			<%=vehicleInspector.getName()%>
-			| Должность: Инспектор, оформляющий ТС | <a href="logout">Выход
-				из системы</a>
-		</p>
+	<div id="content_top">
+		<table border="0" width="100%">
+			<tr>
+				<td width="10%">Пользователь:</td>
+				<td width="30%"><%=vehicleInspector.getName()%></td>
+				<td align="right"><a href="logout" class="href_style">Выход
+						из системы</a></td>
+			</tr>
+			<tr>
+				<td>Должность:</td>
+				<td>инспектор, оформляющий ТС</td>
+			</tr>
+		</table>
 	</div>
+	<br>
 	<!-- Vehicle registration certificate form div  -->
-	<div>
-		<h1>Редактирование информации о регистрации автомобиля</h1>
+	<div id="content_middle">
+		<h1 class="title_align">Редактирование информации о регистрации
+			автомобиля</h1>
 		<%
 			VehicleRegistrationCertificate vrc = new VehicleRegistrationCertificate();
 				if (request.getParameter("id") != null) {
@@ -46,44 +55,45 @@
 		<form>
 			<table>
 				<tr>
-					<td><b>Информация о человеке</b></td>
+					<td class="title_style"><b>Информация о человеке</b></td>
 				</tr>
 				<tr>
 					<td>ФИО:</td>
-					<td><input type="text" name="name" style='width: 100%'
+					<td><input type="text" class="input_style" name="name"
 						value="<%=vrc.getHuman().getName()%>" /></td>
 				</tr>
 				<tr>
 					<td>Серия/номер паспорта:</td>
-					<td><input type="text" name="passportNumber"
-						style='width: 100%'
+					<td><input type="text" class="input_style"
+						name="passportNumber"
 						value="<%=vrc.getHuman().getPassportNumber()%>" /></td>
 				</tr>
 				<tr>
 					<td>Адрес:</td>
-					<td><textarea name="adress" cols="16" rows="1"></textarea></td>
+					<td><textarea name="adress" class="textarea_style" cols="16"
+							rows="1"><%=vrc.getHuman().getAddress()%></textarea></td>
 				</tr>
 				<tr>
-					<td><b>Информация об автомобиле</b></td>
+					<td class="title_style"><b>Информация об автомобиле</b></td>
 				</tr>
 				<tr>
 					<td>Номер кузова:</td>
-					<td><input type="text" name="VIN" style='width: 100%'
+					<td><input type="text" class="input_style" name="VIN"
 						value="<%=vrc.getVehicle().getVIN()%>" /></td>
 				</tr>
 				<tr>
 					<td>Номер двигателя:</td>
-					<td><input type="text" name="EIN" style='width: 100%'
+					<td><input type="text" class="input_style" name="EIN"
 						value="<%=vrc.getVehicle().getEIN()%>" /></td>
 				</tr>
 				<tr>
 					<td>Цвет:</td>
-					<td><input type="text" name="color" style='width: 100%'
+					<td><input type="text" class="input_style" name="color"
 						value="<%=vrc.getVehicle().getColor()%>" /></td>
 				</tr>
 				<tr>
 					<td>Марка:</td>
-					<td><select name="brand">
+					<td><select name="brand" class="select_style">
 							<%
 								// TODO: Implement for-loop over all brands
 							%>
@@ -95,44 +105,44 @@
 				</tr>
 				<tr>
 					<td>Год выпуска:</td>
-					<td><input type="text" name="year" style='width: 100%'
+					<td><input type="text" class="input_style" name="year"
 						value="<%=vrc.getVehicle().getYear().toString()%>" /></td>
 				</tr>
 				<tr>
 					<td>Регистрационный номер:</td>
-					<td><input type="text" name="registrationNumber"
-						style='width: 100%' value="<%=vrc.getRegistrationNumber()%>" /></td>
+					<td><input type="text" class="input_style"
+						name="registrationNumber" value="<%=vrc.getRegistrationNumber()%>" /></td>
 				</tr>
 				<tr>
-					<td><b>Другая информация</b></td>
+					<td class="title_style"><b>Другая информация</b></td>
 				</tr>
 				<tr>
 					<td>Дата постановки на учет:</td>
-					<td><input type="text" name="registrationDate"
-						style='width: 100%'
+					<td><input type="text" class="input_style"
+						name="registrationDate"
 						value="<%=vrc.getRegistrationDate().toString()%>" /></td>
 				</tr>
 				<tr>
 					<td>Дата снятия с учета:</td>
-					<td><input type="text" name="leaveDate" style='width: 100%'
+					<td><input type="text" class="input_style" name="leaveDate"
 						value="<%=(vrc.getLeaveDate() == null) ? "-" : vrc
 						.getLeaveDate()%>" /></td>
 				</tr>
 			</table>
-			<p>
+			<p class="title_align">
 				<%
 					if (vrc.getId() != DBObject.UNDEFINED_ID) {
 				%>
-				<input type="button" value="Обновить" /> <input type="button"
-					value="Удалить" />
+				<input type="button" class="button_style" value="Обновить" /> <input
+					type="button" class="button_style" value="Удалить" />
 				<%
 					} else {
 				%>
-				<input type="button" value="Сохранить" />
+				<input type="button" class="button_style" value="Сохранить" />
 				<%
 					}
 				%>
-				<input type="button" value="Назад"
+				<input type="button" class="button_style" value="Назад"
 					onclick="location.href='workspace.jsp'" />
 			</p>
 		</form>

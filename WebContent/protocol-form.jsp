@@ -10,6 +10,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Информационная система ГИБДД: Рабочее пространство
 	инспектора</title>
+<link rel="stylesheet" type="text/css" href="style.css" />
 <body>
 	<%
 		Inspector inspector = (Inspector) session.getAttribute("inspector");
@@ -18,17 +19,24 @@
 			PatrolInspector patrolInspector = (PatrolInspector) inspector;
 	%>
 	<!-- Top div -->
-	<div>
-		<p>
-			Пользователь:
-			<%=patrolInspector.getName()%>
-			| Должность: Патрульный инспектор | <a href="logout">Выход из
-				системы</a>
-		</p>
+	<div id="content_top">
+		<table border="0" width="100%">
+			<tr>
+				<td width="10%">Пользователь:</td>
+				<td width="30%"><%=patrolInspector.getName()%></td>
+				<td align="right"><a href="logout" class="href_style">Выход
+						из системы</a></td>
+			</tr>
+			<tr>
+				<td>Должность:</td>
+				<td>патрульный инспектор</td>
+			</tr>
+		</table>
 	</div>
+	<br>
 	<!-- Main div -->
-	<div>
-		<h1>Редактирование информации о протоколе</h1>
+	<div id="content_middle">
+		<h1 class="title_align">Редактирование информации о протоколе</h1>
 		<%
 			Protocol protocol = new Protocol();
 				if (request.getParameter("id") != null) {
@@ -45,60 +53,64 @@
 		<form>
 			<table>
 				<tr>
-					<td><b>Информация о человеке</b></td>
+					<td class="title_style"><b>Информация о человеке</b></td>
 				</tr>
 				<tr>
 					<td>ФИО:</td>
-					<td><input type="text" name="name" style='width: 100%'
+					<td><input type="text" class="input_style" name="name"
 						value="<%=protocol.getHuman().getName()%>"></td>
 				</tr>
 				<tr>
 					<td>Серия/номер паспорта:</td>
-					<td><input type="text" name="passportNumber"
-						style='width: 100%'
+					<td><input type="text" class="input_style"
+						name="passportNumber"
 						value="<%=protocol.getHuman().getPassportNumber()%>"></td>
 				</tr>
 				<tr>
 					<td>Адрес:</td>
-					<td><textarea name="adress" cols="34" rows="1"><%=protocol.getHuman().getAddress()%></textarea></td>
+					<td><textarea name="adress" class="textarea_style" cols="34"
+							rows="3"><%=protocol.getHuman().getAddress()%></textarea></td>
 				</tr>
 				<tr>
-					<td><b>Информация о нарушении</b></td>
+					<td class="title_style"><b>Информация о нарушении</b></td>
 				</tr>
 				<tr>
 					<td>Тип нарушения:</td>
-					<td><textarea name="title" cols="34" rows="3"><%=protocol.getViolation().getTitle()%></textarea></td>
+					<td><textarea name="title" class="textarea_style" cols="34"
+							rows="3"><%=protocol.getViolation().getTitle()%></textarea></td>
 				</tr>
 				<tr>
 					<td>Действия:</td>
-					<td><textarea name="description" cols="34" rows="3"><%=protocol.getViolation().getDescription()%></textarea></td>
+					<td><textarea name="description" class="textarea_style"
+							cols="34" rows="3"><%=protocol.getViolation().getDescription()%></textarea></td>
 				</tr>
 				<tr>
 					<td>Ответственность:</td>
-					<td><textarea name="punishment" cols="34" rows="3"><%=protocol.getViolation().getPunishment()%></textarea></td>
+					<td><textarea name="punishment" class="textarea_style"
+							cols="34" rows="3"><%=protocol.getViolation().getPunishment()%></textarea></td>
 				</tr>
 				<tr>
-					<td><b>Информация об автомобиле</b></td>
+					<td class="title_style"><b>Информация об автомобиле</b></td>
 				</tr>
 
 				<tr>
 					<td>Номер кузова:</td>
-					<td><input type="text" name="VIN" style='width: 100%'
+					<td><input type="text" class="input_style" name="VIN"
 						value="<%=protocol.getVehicle().getVIN()%>"></td>
 				</tr>
 				<tr>
 					<td>Номер двигателя:</td>
-					<td><input type="text" name="EIN" style='width: 100%'
+					<td><input type="text" class="input_style" name="EIN"
 						value="<%=protocol.getVehicle().getEIN()%>"></td>
 				</tr>
 				<tr>
 					<td>Цвет:</td>
-					<td><input type="text" name="color" style='width: 100%'
+					<td><input type="text" class="input_style" name="color"
 						value="<%=protocol.getVehicle().getColor()%>"></td>
 				</tr>
 				<tr>
 					<td>Марка:</td>
-					<td><select name="brand">
+					<td><select name="brand" class="select_style">
 							<%
 								// TODO: Implement for-loop over all brands
 							%>
@@ -110,37 +122,37 @@
 				</tr>
 				<tr>
 					<td>Год выпуска:</td>
-					<td><input type="text" name="year" style='width: 100%'
+					<td><input type="text" class="input_style" name="year"
 						value="<%=protocol.getVehicle().getYear().toString()%>"></td>
 				</tr>
 				<tr>
-					<td><b>Другая информация о нарушении</b></td>
+					<td class="title_style"><b>Другая информация о нарушении</b></td>
 				</tr>
 				<tr>
 					<td>Дата:</td>
-					<td><input type="text" name="date" style='width: 100%'
+					<td><input type="text" class="input_style" name="date"
 						value="<%=protocol.getDate().toString()%>"></td>
 				</tr>
 				<tr>
 					<td>Регистрационный номер:</td>
-					<td><input type="text" name="registrationNumber"
-						style='width: 100%' value="?"></td>
+					<td><input type="text" class="input_style"
+						name="registrationNumber" value="?"></td>
 				</tr>
 			</table>
-			<p>
+			<p class="title_align">
 				<%
 					if (protocol.getId() != DBObject.UNDEFINED_ID) {
 				%>
-				<input type="button" value="Обновить" /> <input type="button"
-					value="Удалить" />
+				<input type="button" class="button_style" value="Обновить" /> <input
+					type="button" class="button_style" value="Удалить" />
 				<%
 					} else {
 				%>
-				<input type="button" value="Сохранить" />
+				<input type="button" class="button_style" value="Сохранить" />
 				<%
 					}
 				%>
-				<input type="button" value="Назад"
+				<input type="button" class="button_style" value="Назад"
 					onclick="location.href='workspace.jsp'" />
 			</p>
 		</form>
