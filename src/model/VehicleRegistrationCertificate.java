@@ -93,8 +93,8 @@ public class VehicleRegistrationCertificate extends DBObject {
 		this.vehicle = new Vehicle();
 		this.human = new Human();
 		this.registrationNumber = "";
-		this.registrationDate = new Date(0, 0, 0);
-		this.leaveDate = new Date(0, 0, 0);
+		this.registrationDate = Date.valueOf("1900-01-01");
+		this.leaveDate = Date.valueOf("1900-01-01");
 		this.vehicleInspector = new VehicleInspector();
 	}
 
@@ -295,10 +295,10 @@ public class VehicleRegistrationCertificate extends DBObject {
 	 * @return контейнер типа HashSet в котором содержатся объекты, хранящиеся в
 	 *         таблице vehicle_registraion_certificates базы данных
 	 */
-	public static Set<VehicleRegistrationCertificate> selectVehicleRegistrationCertificates(){
+	public static Set<VehicleRegistrationCertificate> selectVehicleRegistrationCertificates() {
 		Set<VehicleRegistrationCertificate> vrcs = new HashSet<VehicleRegistrationCertificate>();
 		VehicleRegistrationCertificate vrc = new VehicleRegistrationCertificate();
-		
+
 		try {
 			Connection conn = vrc.getConnection();
 			try {
@@ -320,12 +320,14 @@ public class VehicleRegistrationCertificate extends DBObject {
 					vrc.vehicleInspector.select(res.getInt(5));
 					vrc.vehicle.select(res.getInt(6));
 					vrc.vehicle.select(res.getInt(7));
-					
+
 					vrcs.add(new VehicleRegistrationCertificate(vrc));
 				}
 
-				/*System.out.println("...Row with string representation \n\t"
-						+ vrc.toString() + "\nwas selected from base");*/
+				/*
+				 * System.out.println("...Row with string representation \n\t" +
+				 * vrc.toString() + "\nwas selected from base");
+				 */
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -337,7 +339,6 @@ public class VehicleRegistrationCertificate extends DBObject {
 			e.printStackTrace();
 		}
 
-		
 		return vrcs;
 	}
 

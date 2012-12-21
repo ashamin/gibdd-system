@@ -88,7 +88,7 @@ public class Protocol extends DBObject {
 	public Protocol() {
 		this.human = new Human();
 		this.violation = new Violation();
-		this.date = new Date(0, 0, 0);
+		this.date = Date.valueOf("1900-01-01");
 		this.vehicle = new Vehicle();
 		this.patrolInspector = new PatrolInspector();
 	}
@@ -299,8 +299,10 @@ public class Protocol extends DBObject {
 					protocols.add(new Protocol(p));
 				}
 
-				/*System.out.println("...Row with string representation \n\t"
-						+ p.toString() + "\nwas selected from base");*/
+				/*
+				 * System.out.println("...Row with string representation \n\t" +
+				 * p.toString() + "\nwas selected from base");
+				 */
 
 			} catch (Exception e) {
 				e.printStackTrace();

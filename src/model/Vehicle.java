@@ -86,7 +86,7 @@ public class Vehicle extends DBObject {
 		this.EIN = "";
 		this.color = "";
 		this.brand = "";
-		this.year = new Date(0, 0, 0);
+		this.year = Date.valueOf("1900-01-01");
 	}
 
 	/**
@@ -281,15 +281,15 @@ public class Vehicle extends DBObject {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * @return контейнер типа HashSet в котором содержатся объекты, хранящиеся в
 	 *         таблице brands базы данных
 	 */
-	public static Set<String> selectBrands(){
+	public static Set<String> selectBrands() {
 		Set<String> brands = new HashSet<String>();
 		Vehicle vehicle = new Vehicle();
-		
+
 		try {
 			Connection conn = vehicle.getConnection();
 			try {
@@ -311,7 +311,6 @@ public class Vehicle extends DBObject {
 			e.printStackTrace();
 		}
 
-		
 		return brands;
 	}
 

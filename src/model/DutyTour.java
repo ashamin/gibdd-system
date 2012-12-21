@@ -86,8 +86,8 @@ public class DutyTour extends DBObject {
 		this.patrolInspectors = new HashSet<PatrolInspector>();
 		this.automaticRecorders = new HashSet<AutomaticRecorder>();
 		this.dutyInspector = new DutyInspector();
-		this.startDate = new Date(0, 0, 0);
-		this.finishDate = new Date(0, 0, 0);
+		this.startDate = Date.valueOf("1900-01-01");
+		this.finishDate = Date.valueOf("1900-01-01");
 	}
 
 	/**
@@ -102,23 +102,25 @@ public class DutyTour extends DBObject {
 	public DutyTour(Set<PatrolInspector> patrolInspectors,
 			Set<AutomaticRecorder> recorders, DutyInspector dutyInspector,
 			Date startDate, Date finishDate) {
-		
+
 		DBObject tmp;
 		this.patrolInspectors = new HashSet<PatrolInspector>();
 		this.automaticRecorders = new HashSet<AutomaticRecorder>();
-		
+
 		Iterator<PatrolInspector> itp = patrolInspectors.iterator();
-		while(itp.hasNext()){
+		while (itp.hasNext()) {
 			tmp = itp.next();
-			this.patrolInspectors.add(new PatrolInspector((PatrolInspector)tmp));
+			this.patrolInspectors
+					.add(new PatrolInspector((PatrolInspector) tmp));
 		}
-		
+
 		Iterator<AutomaticRecorder> ita = automaticRecorders.iterator();
-		while(ita.hasNext()){
+		while (ita.hasNext()) {
 			tmp = ita.next();
-			this.automaticRecorders.add(new AutomaticRecorder((AutomaticRecorder)tmp));
+			this.automaticRecorders.add(new AutomaticRecorder(
+					(AutomaticRecorder) tmp));
 		}
-		
+
 		this.dutyInspector = new DutyInspector(dutyInspector);
 		this.startDate = new Date(startDate.getTime());
 		this.finishDate = new Date(finishDate.getTime());
@@ -133,21 +135,24 @@ public class DutyTour extends DBObject {
 	 */
 	public DutyTour(DutyTour dutyTour) {
 		this.id = dutyTour.id;
-		
+
 		DBObject tmp;
 		this.patrolInspectors = new HashSet<PatrolInspector>();
 		this.automaticRecorders = new HashSet<AutomaticRecorder>();
-		
+
 		Iterator<PatrolInspector> itp = dutyTour.patrolInspectors.iterator();
-		while(itp.hasNext()){
+		while (itp.hasNext()) {
 			tmp = itp.next();
-			this.patrolInspectors.add(new PatrolInspector((PatrolInspector)tmp));
+			this.patrolInspectors
+					.add(new PatrolInspector((PatrolInspector) tmp));
 		}
-		
-		Iterator<AutomaticRecorder> ita = dutyTour.automaticRecorders.iterator();
-		while(ita.hasNext()){
+
+		Iterator<AutomaticRecorder> ita = dutyTour.automaticRecorders
+				.iterator();
+		while (ita.hasNext()) {
 			tmp = ita.next();
-			this.automaticRecorders.add(new AutomaticRecorder((AutomaticRecorder)tmp));
+			this.automaticRecorders.add(new AutomaticRecorder(
+					(AutomaticRecorder) tmp));
 		}
 
 		this.dutyInspector = new DutyInspector(dutyTour.dutyInspector);
