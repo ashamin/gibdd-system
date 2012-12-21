@@ -5,8 +5,6 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * VehicleRegistrationSertificate Класс свидетельство о регистрации. Содержит
@@ -289,57 +287,6 @@ public class VehicleRegistrationCertificate extends DBObject {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * @return контейнер типа HashSet в котором содержатся объекты, хранящиеся в
-	 *         таблице vehicle_registraion_certificates базы данных
-	 */
-	public static Set<VehicleRegistrationCertificate> selectVehicleRegistrationCertificates() {
-		Set<VehicleRegistrationCertificate> vrcs = new HashSet<VehicleRegistrationCertificate>();
-		VehicleRegistrationCertificate vrc = new VehicleRegistrationCertificate();
-
-		try {
-			Connection conn = vrc.getConnection();
-			try {
-				PreparedStatement stmt = conn
-						.prepareStatement("select vehicle_registration_certificate_id, "
-								+ "registration_date, leave_date, registration_number, "
-								+ "vehicle_inspectors.inspector_id, vehicle_id, human_id "
-								+ "from gibdd_system_db.vehicle_registration_certificates, "
-								+ "gibdd_system_db.vehicle_inspectors "
-								+ "where "
-								+ "vehicle_inspectors.vehicle_inspector_id = vehicle_registration_certificates.vehicle_inspector_id");
-				ResultSet res = stmt.executeQuery();
-
-				while (res.next()) {
-					vrc.id = res.getInt(1);
-					vrc.registrationDate = res.getDate(2);
-					vrc.leaveDate = res.getDate(3);
-					vrc.registrationNumber = res.getString(4);
-					vrc.vehicleInspector.select(res.getInt(5));
-					vrc.vehicle.select(res.getInt(6));
-					vrc.vehicle.select(res.getInt(7));
-
-					vrcs.add(new VehicleRegistrationCertificate(vrc));
-				}
-
-				/*
-				 * System.out.println("...Row with string representation \n\t" +
-				 * vrc.toString() + "\nwas selected from base");
-				 */
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				conn.close();
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return vrcs;
 	}
 
 	@Override
