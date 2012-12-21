@@ -107,7 +107,7 @@ public abstract class DBObject {
 	 * @throws NamingException
 	 * @throws SQLException
 	 */
-	public Connection getConnection() throws NamingException, SQLException {
+	protected Connection getConnection() throws NamingException, SQLException {
 		InitialContext context = new InitialContext();
 		DataSource dataSource = (DataSource) context
 				.lookup("java:comp/env/gibdd-system");
