@@ -1,3 +1,9 @@
+<%@page import="model.Violation"%>
+<%@page import="model.Protocol"%>
+<%@page import="model.Vehicle"%>
+<%@page import="model.VehicleRegistrationCertificate"%>
+<%@page import="model.Human"%>
+<%@page import="model.DriverLicense"%>
 <%@page import="model.Inspector"%>
 <%@page import="model.DriverLicenseInspector"%>
 <%@page import="model.DutyInspector"%>
@@ -54,15 +60,26 @@
 				</tr>
 
 				<%
-					// TODO: implement for-loop over all driver licenses
+					int i = 0;
+						for (DriverLicense driverLicense : driverLicenseInspector
+								.selectDriverLicenses()) {
+							Human human = driverLicense.getHuman();
 				%>
 				<tr>
 					<td><input type="button" value="Ред."
-						onclick="location.href='driver-license-form.jsp?id='"></td>
+						onclick="location.href='driver-license-form.jsp?id=<%=driverLicense.getId()%>'"></td>
+					<td><%=++i%></td>
+					<td><%=human.getName()%></td>
+					<td><%=human.getPassportNumber()%></td>
+					<td><%=human.getAddress()%></td>
+					<td><%=driverLicense.getRegistrationDate().toString()%></td>
+					<td><%=driverLicense.getLeaveDate().toString()%></td>
+					<td><%=driverLicense.getCategories()%></td>
 				</tr>
 				<%
-					// End of for-loop
+					} // End of for-loop
 				%>
+
 			</table>
 			<p>
 				<input type="button" value="Новое водительское удостоверение"
@@ -88,6 +105,7 @@
 	<div>
 		<h1>Наряды</h1>
 		<form>
+			<!-- Table Duty Tours -->
 			<table border="1">
 				<tr>
 					<th></th>
@@ -132,32 +150,45 @@
 	<div>
 		<h1>Протоколы</h1>
 		<form>
+			<!-- Table Protocols -->
 			<table border="1">
 				<tr>
 					<th></th>
 					<th>№</th>
 					<th>ФИО</th>
-					<th>Номер кузова</th>
-					<th>Номер двигателя</th>
+					<th>Регистрационный номер</th>
 					<th>Цвет</th>
 					<th>Марка</th>
-					<th>Год выпуска</th>
 					<th>Тип нарушения</th>
 					<th>Действия</th>
 					<th>Ответственность</th>
 					<th>Дата</th>
-					<th>Регистрационный номер</th>
 					<th>Состояние</th>
 				</tr>
 				<%
 					// TODO: Implement for-loop over all protocols
+						int i = 0;
+						for (Protocol protocol : patrolInspector.selectProtocols()) {
+							Human human = protocol.getHuman();
+							Vehicle vehicle = protocol.getVehicle();
+							Violation violation = protocol.getViolation();
 				%>
 				<tr>
 					<td><input type="button" value="Ред."
-						onclick="location.href='protocol-form.jsp?id='"></td>
+						onclick="location.href='protocol-form.jsp?id=<%=protocol.getId()%>'"></td>
+					<td><%=++i%></td>
+					<td><%=human.getName()%></td>
+					<td>?</td>
+					<td><%=vehicle.getColor()%></td>
+					<td><%=vehicle.getBrand()%></td>
+					<td><%=violation.getTitle()%></td>
+					<td><%=violation.getDescription()%></td>
+					<td><%=violation.getPunishment()%></td>
+					<td><%=protocol.getDate().toString()%></td>
+					<td>?</td>
 				</tr>
 				<%
-					// End of for-loop
+					}// End of for-loop
 				%>
 			</table>
 			<p>
@@ -183,6 +214,7 @@
 	<div>
 		<h1>Транспортные средства</h1>
 		<form>
+			<!-- Table Vehicle Registration Sertificates -->
 			<table border="1">
 				<tr>
 					<th></th>
@@ -191,7 +223,7 @@
 					<th>Серия/номер паспорта</th>
 					<th>Адрес</th>
 					<th>Номер кузова</th>
-					<th>Номер двигателя</th>					
+					<th>Номер двигателя</th>
 					<th>Цвет</th>
 					<th>Марка</th>
 					<th>Год выпуска</th>
@@ -201,13 +233,31 @@
 				</tr>
 				<%
 					// TODO: Implement for-loop over all vehicle registration certificates
+						int i = 0;
+						for (VehicleRegistrationCertificate vrc : vehicleInspector
+								.selectVehicleRegistrationCertificates()) {
+							Human human = vrc.getHuman();
+							Vehicle vehicle = vrc.getVehicle();
 				%>
 				<tr>
 					<td><input type="button" value="Ред."
-						onclick="location.href='vehicle-registration-certificate-form.jsp?id='"></td>
+						onclick="location.href='vehicle-registration-certificate-form.jsp?id=<%=vrc.getId()%>'"></td>
+					<td><%=++i%></td>
+					<td><%=human.getName()%></td>
+					<td><%=human.getPassportNumber()%></td>
+					<td><%=human.getAddress()%></td>
+					<td><%=vehicle.getVIN()%></td>
+					<td><%=vehicle.getEIN()%></td>
+					<td><%=vehicle.getColor()%></td>
+					<td><%=vehicle.getBrand()%></td>
+					<td><%=vehicle.getYear().toString()%></td>
+					<td><%=vrc.getRegistrationNumber()%></td>
+					<td><%=vrc.getRegistrationDate().toString()%></td>
+					<td><%=(vrc.getLeaveDate() == null) ? "-" : vrc
+							.getLeaveDate().toString()%></td>
 				</tr>
 				<%
-					// End of for-loop
+					}// End of for-loop
 				%>
 			</table>
 			<p>

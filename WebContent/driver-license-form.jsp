@@ -1,3 +1,5 @@
+<%@page import="model.DBObject"%>
+<%@page import="model.DriverLicense"%>
 <%@page import="model.Inspector"%>
 <%@page import="model.DriverLicenseInspector"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -28,23 +30,39 @@
 	<!-- Main div -->
 	<div>
 		<h1>Редактирование информации о водительском удостоверении</h1>
-		<form name="DriverLicense">
+		<%
+			DriverLicense driverLicense = new DriverLicense();
+
+				if (request.getParameter("id") != null) {
+					int id = DBObject.UNDEFINED_ID;
+
+					try {
+						id = Integer.parseInt(request.getParameter("id"));
+					} catch (Exception e) {
+					}
+
+					driverLicense.select(id);
+				}
+		%>
+		<form>
 			<table>
 				<tr>
 					<td><b>Информация о человеке</b></td>
 				</tr>
 				<tr>
 					<td>ФИО:</td>
-					<td><input type="text" name="name" style='width: 100%' /></td>
+					<td><input type="text" name="name" style='width: 100%'
+						value="<%=driverLicense.getHuman().getName()%>" /></td>
 				</tr>
 				<tr>
 					<td>Серия/номер паспорта:</td>
 					<td><input type="text" name="passportNumber"
-						style='width: 100%' /></td>
+						style='width: 100%'
+						value="<%=driverLicense.getHuman().getPassportNumber()%>" /></td>
 				</tr>
 				<tr>
 					<td>Адрес:</td>
-					<td><textarea name="adress" cols="16" rows="1"></textarea></td>
+					<td><textarea name="adress" cols="16" rows="1"><%=driverLicense.getHuman().getAddress()%></textarea></td>
 				</tr>
 				<tr>
 					<td><b>Другая информация</b></td>
@@ -52,20 +70,23 @@
 				<tr>
 					<td>Дата выдачи удостоверения:</td>
 					<td><input type="text" name="registrationDate"
-						style='width: 100%' /></td>
+						style='width: 100%'
+						value="<%=driverLicense.getRegistrationDate().toString()%>" /></td>
 				</tr>
 				<tr>
 					<td>Дата истечения срока удостоверения:</td>
-					<td><input type="text" name="leaveDate" style='width: 100%' /></td>
+					<td><input type="text" name="leaveDate" style='width: 100%'
+						value="<%=driverLicense.getLeaveDate().toString()%>" /></td>
 				</tr>
 				<tr>
 					<td>Категории:</td>
-					<td><input type="text" name="categories" style='width: 100%' /></td>
+					<td><input type="text" name="categories" style='width: 100%'
+						value="<%=driverLicense.getCategories()%>" /></td>
 				</tr>
 			</table>
 			<p>
 				<%
-					if (request.getParameter("id") != null) {
+					if (driverLicense.getId() != DBObject.UNDEFINED_ID) {
 				%>
 				<input type="button" value="Обновить" /><input type="button"
 					value="Удалить" />

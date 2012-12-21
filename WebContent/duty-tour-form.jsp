@@ -28,7 +28,7 @@
 	<!-- Main div -->
 	<div>
 		<h1>Редактирование информации о наряде</h1>
-		<form name="DriverLicense">
+		<form>
 			<table>
 				<tr>
 					<td>Инспекторы:</td>

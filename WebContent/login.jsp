@@ -9,7 +9,7 @@
 <body>
 	<div>
 		<h1>Вход в систему</h1>
-		<form name="login" method="post" action="login">
+		<form method="post" action="login">
 			<table>
 				<tr>
 					<td>Имя пользователя:</td>
@@ -29,9 +29,11 @@
 			if (loginError != null) {
 				session.setAttribute("login-error", null);
 		%>
-		<p>
-			Ошибка:
-			<%=loginError%></p>
+		<div>
+			<p>
+				Ошибка:
+				<%=loginError%></p>
+		</div>
 		<%
 			}
 		%>
