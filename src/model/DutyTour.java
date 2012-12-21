@@ -1,6 +1,10 @@
 ﻿package model;
 
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.HashSet;
@@ -165,32 +169,209 @@ public class DutyTour extends DBObject {
 	 */
 	@Override
 	public void insert() {
-		// TODO implement database insert operation
-		throw new UnsupportedOperationException("not implemented");
+		try {
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement(
+								"insert into gibdd_system_db.duty_tours (duty_tour_id, start_date, finish_date, "
+										+ "duty_inspector_id) "
+										+ "values (default, ?, ?, ?)",
+								Statement.RETURN_GENERATED_KEYS);
+				stmt.setDate(1, this.startDate);
+				stmt.setDate(2, this.finishDate);
+				stmt.setInt(3, this.dutyInspector.getBaseId());
+				stmt.executeUpdate();
+
+				ResultSet key = stmt.getGeneratedKeys();
+				key.next();
+				this.id = key.getInt(1);
+
+				stmt = conn
+						.prepareStatement("insert into gibdd_system_db.duties (duty_id, duty_tour_id, patrol_inspector_id) "
+								+ "values (default, ?, ?)");
+
+				Iterator<PatrolInspector> it = this.patrolInspectors.iterator();
+				PatrolInspector tmp;
+				while (it.hasNext()) {
+					tmp = it.next();
+					stmt.setInt(1, this.id);
+					stmt.setInt(2, tmp.getBaseId());
+					stmt.executeUpdate();
+				}
+
+				/*
+				 * System.out.println("...Row with string representation \n\t" +
+				 * this.toString() + "\nwas added");
+				 */
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void update() {
-		// TODO implement database update operation
-		throw new UnsupportedOperationException("not implemented");
+		try {
+			DutyTour tmp = new DutyTour(this);
+			tmp.select(this.id);
+			String oldRepr = tmp.toString();
+
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("update gibdd_system_db.duty_tours set "
+								+ "start_date=?, "
+								+ "finish_date=?, "
+								+ "duty_inspector_id=? "
+								+ "where duty_tour_id = "
+								+ Integer.toString(this.id));
+				stmt.setDate(1, this.startDate);
+				stmt.setDate(2, this.finishDate);
+				stmt.setInt(3, this.dutyInspector.getBaseId());
+
+				stmt.executeUpdate();
+				
+				/*
+				 * удаляем все из расшивочной таблицы
+				 */
+				stmt = conn
+						.prepareStatement("delete from gibdd_system_db.duties where duty_tour_id = "
+								+ Integer.toString(this.id));
+				stmt.executeUpdate();
+				
+				/*
+				 * снова вставляем все в расшивочную таблицу
+				 */
+				stmt = conn
+						.prepareStatement("insert into gibdd_system_db.duties (duty_id, duty_tour_id, patrol_inspector_id) "
+								+ "values (default, ?, ?)");
+
+				Iterator<PatrolInspector> it = this.patrolInspectors.iterator();
+				PatrolInspector tmpPatrolInspector;
+				while (it.hasNext()) {
+					tmpPatrolInspector = it.next();
+					stmt.setInt(1, this.id);
+					stmt.setInt(2, tmpPatrolInspector.getBaseId());
+					stmt.executeUpdate();
+				}
+
+				System.out
+						.println("...Row in base with string representation \n\t"
+								+ oldRepr
+								+ "\nwas updated to\n\t"
+								+ this.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void delete() {
-		// TODO implement database delete operation
-		throw new UnsupportedOperationException("not implemented");
+		try {
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("delete from gibdd_system_db.duty_tours where duty_tour_id = "
+								+ Integer.toString(this.id));
+				stmt.executeUpdate();
+				
+				stmt = conn
+						.prepareStatement("delete from gibdd_system_db.duties where duty_tour_id = "
+								+ Integer.toString(this.id));
+				stmt.executeUpdate();
+
+				System.out.println("...Row with string representation \n\t"
+						+ this.toString() + "\nwas deleted from base");
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	@Override
 	public void select(int id) {
-		// TODO implement database select operation
-		throw new UnsupportedOperationException("not implemented");
+		try {
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("select duty_tour_id, start_date, finish_date, duty_inspectors.inspector_id "
+								+ "from gibdd_system_db.duty_tours, gibdd_system_db.duty_inspectors "
+								+ "where duty_tour_id = "
+								+ Integer.toString(id)
+								+ " and "
+								+ "duty_inspectors.duty_inspector_id = duty_tours.duty_inspector_id");
+				ResultSet res = stmt.executeQuery();
+
+				while (res.next()) {
+					this.id = res.getInt(1);
+					this.startDate = res.getDate(2);
+					this.finishDate = res.getDate(3);
+					this.dutyInspector.select(res.getInt(4));
+				}
+
+				stmt = conn
+						.prepareStatement("select patrol_inspectors.inspector_id "
+								+ "from gibdd_system_db.patrol_inspectors, gibdd_system_db.duties "
+								+ "where duties.patrol_inspector_id = patrol_inspectors.patrol_inspector_id");
+				
+				res = stmt.executeQuery();
+				
+				this.patrolInspectors.clear();
+				PatrolInspector tmp = new PatrolInspector();
+				while(res.next()){
+					tmp.select(res.getInt(1));
+					this.patrolInspectors.add(tmp);
+				}
+
+				
+				 System.out.println("...Row with string representation \n\t" +
+				 this.toString() + "\nwas selected from base");
+				 
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public String toString() {
-		// TODO implement string representation of the object
-		throw new UnsupportedOperationException("not implemented");
+		StringBuilder sb = new StringBuilder();
+		sb.append("id = " + this.id + ", ");
+		sb.append("duty_inspector = " + this.dutyInspector.toString() + ", ");
+		sb.append("start_date = " + this.startDate.toString() + ", ");
+		sb.append("finish_date = " + this.finishDate.toString() + ", ");
+		sb.append(" [ ");
+		Iterator<PatrolInspector> it = this.patrolInspectors.iterator();
+		PatrolInspector tmp;
+		while (it.hasNext()) {
+			tmp = it.next();
+			sb.append(tmp.toString() + ", ");
+		}
+		return sb.toString();
 	}
 
 	/**
