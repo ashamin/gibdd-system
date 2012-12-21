@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * DriverLicenseInspector Класс описывает параметры инспектора, оформляющего ТС.
@@ -234,8 +236,10 @@ public class DriverLicenseInspector extends Inspector {
 					bid = res.getInt(1);
 				}
 
-				/*System.out.println("...Row with string representation \n\t"
-						+ this.toString() + "\nwas selected from base");*/
+				/*
+				 * System.out.println("...Row with string representation \n\t" +
+				 * this.toString() + "\nwas selected from base");
+				 */
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -250,7 +254,6 @@ public class DriverLicenseInspector extends Inspector {
 		return bid;
 	}
 
-	
 	@Override
 	public void select(String login, String password) {
 		try {
@@ -298,6 +301,58 @@ public class DriverLicenseInspector extends Inspector {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * @return контейнер типа ArrayList в котором содержатся объекты, хранящиеся
+	 *         в таблице driver_licenses базы данных
+	 */
+	public List<DriverLicense> selectDriverLicenses() {
+		List<DriverLicense> driverLicenses = new ArrayList<DriverLicense>();
+
+		try {
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("select driver_license_id, registration_date, leave_date, categories, "
+								+ "human_id "
+								+ "from gibdd_system_db.driver_licenses, gibdd_system_db.driver_license_inspectors "
+								+ "where "
+								+ "driver_license_inspectors.driver_license_inspector_id = driver_licenses.driver_license_inspector_id "
+								+ "and driver_license_inspectors.driver_license_inspector_id = "
+								+ this.getBaseId() + " order by registration_date asc");
+
+				ResultSet res = stmt.executeQuery();
+
+				while (res.next()) {
+					DriverLicense dl = new DriverLicense();
+
+					dl.id = res.getInt(1);
+					dl.setRegistrationDate(res.getDate(2));
+					dl.setLeaveDate(res.getDate(3));
+					dl.setCategories(res.getString(4));
+					dl.setInspector(this);
+					dl.getHuman().select(res.getInt(5));
+
+					driverLicenses.add(dl);
+				}
+
+				/*
+				 * System.out.println("...Row with string representation \n\t" +
+				 * dl.toString() + "\nwas selected from base");
+				 */
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return driverLicenses;
 	}
 
 	@Override

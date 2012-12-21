@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * VehicleInspector Класс описывает параметры инспектора, выдающего права.
@@ -218,6 +220,61 @@ public class VehicleInspector extends Inspector {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * @return контейнер типа ArrayList в котором содержатся объекты, хранящиеся
+	 *         в таблице vehicle_registraion_certificates базы данных
+	 */
+	public List<VehicleRegistrationCertificate> selectVehicleRegistrationCertificates() {
+		List<VehicleRegistrationCertificate> vrcs = new ArrayList<VehicleRegistrationCertificate>();
+
+		try {
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("select vehicle_registration_certificate_id, "
+								+ "registration_date, leave_date, registration_number, "
+								+ "vehicle_id, human_id "
+								+ "from gibdd_system_db.vehicle_registration_certificates, "
+								+ "gibdd_system_db.vehicle_inspectors "
+								+ "where "
+								+ "vehicle_inspectors.vehicle_inspector_id = vehicle_registration_certificates.vehicle_inspector_id "
+								+ "and vehicle_inspectors.vehicle_inspector_id = "
+								+ this.getBaseId()
+								+ " order by registration_date asc");
+				ResultSet res = stmt.executeQuery();
+
+				while (res.next()) {
+					VehicleRegistrationCertificate vrc = new VehicleRegistrationCertificate();
+
+					vrc.id = res.getInt(1);
+					vrc.setRegistrationDate(res.getDate(2));
+					vrc.setLeaveDate(res.getDate(3));
+					vrc.setRegistrationNumber(res.getString(4));
+					vrc.setVehicleInspector(this);
+					vrc.getVehicle().select(res.getInt(5));
+					vrc.getHuman().select(res.getInt(6));
+
+					vrcs.add(vrc);
+				}
+
+				/*
+				 * System.out.println("...Row with string representation \n\t" +
+				 * vrc.toString() + "\nwas selected from base");
+				 */
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return vrcs;
 	}
 
 	/**

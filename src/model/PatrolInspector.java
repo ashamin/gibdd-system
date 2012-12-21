@@ -5,8 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -132,15 +134,15 @@ public class PatrolInspector extends Inspector implements Runnable {
 	 */
 	public PatrolInspector(PatrolInspector inspector) {
 		super((Inspector) inspector);
-		
+
 		this.queue = new LinkedList<Protocol>();
 		Protocol tmp;
 		Iterator<Protocol> it = inspector.queue.iterator();
-		while(it.hasNext()){
+		while (it.hasNext()) {
 			tmp = it.next();
 			this.queue.add(new Protocol(tmp));
 		}
-				
+
 		this.coordinates = new EarthCoordinates(inspector.coordinates);
 		this.running = inspector.running;
 	}
@@ -297,8 +299,10 @@ public class PatrolInspector extends Inspector implements Runnable {
 					bid = res.getInt(1);
 				}
 
-				/*System.out.println("...Row with string representation \n\t"
-						+ this.toString() + "\nwas selected from base");*/
+				/*
+				 * System.out.println("...Row with string representation \n\t" +
+				 * this.toString() + "\nwas selected from base");
+				 */
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -365,6 +369,57 @@ public class PatrolInspector extends Inspector implements Runnable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * @return контейнер типа ArrayList в котором содержатся объекты, хранящиеся
+	 *         в таблице protocols базы данных
+	 */
+	public List<Protocol> selectProtocols() {
+		List<Protocol> protocols = new ArrayList<Protocol>();
+
+		try {
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("select protocol_id, date, "
+								+ "violation_id, vehicle_id, human_id "
+								+ "from gibdd_system_db.protocols, gibdd_system_db.patrol_inspectors "
+								+ "where "
+								+ "patrol_inspectors.patrol_inspector_id = protocols.patrol_inspector_id and "
+								+ "patrol_inspectors.patrol_inspector_id = "
+								+ this.getBaseId());
+				ResultSet res = stmt.executeQuery();
+
+				while (res.next()) {
+					Protocol p = new Protocol();
+
+					p.id = res.getInt(1);
+					p.setDate(res.getDate(2));
+					p.getViolation().select(res.getInt(3));
+					p.setPatrolInspector(this);
+					p.getVehicle().select(res.getInt(4));
+					p.getHuman().select(res.getInt(5));
+
+					protocols.add(p);
+				}
+
+				/*
+				 * System.out.println("...Row with string representation \n\t" +
+				 * p.toString() + "\nwas selected from base");
+				 */
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return protocols;
 	}
 
 	@Override
