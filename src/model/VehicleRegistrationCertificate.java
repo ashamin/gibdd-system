@@ -272,7 +272,7 @@ public class VehicleRegistrationCertificate extends DBObject {
 					this.registrationNumber = res.getString(4);
 					this.vehicleInspector.select(res.getInt(5));
 					this.vehicle.select(res.getInt(6));
-					this.vehicle.select(res.getInt(7));
+					this.human.select(res.getInt(7));
 				}
 
 				System.out.println("...Row with string representation \n\t"
