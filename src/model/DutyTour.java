@@ -236,7 +236,7 @@ public class DutyTour extends DBObject {
 				stmt.setInt(3, this.dutyInspector.getBaseId());
 
 				stmt.executeUpdate();
-				
+
 				/*
 				 * удаляем все из расшивочной таблицы
 				 */
@@ -244,7 +244,7 @@ public class DutyTour extends DBObject {
 						.prepareStatement("delete from gibdd_system_db.duties where duty_tour_id = "
 								+ Integer.toString(this.id));
 				stmt.executeUpdate();
-				
+
 				/*
 				 * снова вставляем все в расшивочную таблицу
 				 */
@@ -286,7 +286,7 @@ public class DutyTour extends DBObject {
 						.prepareStatement("delete from gibdd_system_db.duty_tours where duty_tour_id = "
 								+ Integer.toString(this.id));
 				stmt.executeUpdate();
-				
+
 				stmt = conn
 						.prepareStatement("delete from gibdd_system_db.duties where duty_tour_id = "
 								+ Integer.toString(this.id));
@@ -330,21 +330,21 @@ public class DutyTour extends DBObject {
 				stmt = conn
 						.prepareStatement("select patrol_inspectors.inspector_id "
 								+ "from gibdd_system_db.patrol_inspectors, gibdd_system_db.duties "
-								+ "where duties.patrol_inspector_id = patrol_inspectors.patrol_inspector_id");
-				
+								+ "where duties.patrol_inspector_id = patrol_inspectors.patrol_inspector_id "
+								+ "and duties.duty_tour_id = " 
+								+ Integer.toString(this.id));
+
 				res = stmt.executeQuery();
-				
+
 				this.patrolInspectors.clear();
 				PatrolInspector tmp = new PatrolInspector();
-				while(res.next()){
+				while (res.next()) {
 					tmp.select(res.getInt(1));
-					this.patrolInspectors.add(tmp);
+					this.patrolInspectors.add(new PatrolInspector(tmp));
 				}
 
-				
-				 System.out.println("...Row with string representation \n\t" +
-				 this.toString() + "\nwas selected from base");
-				 
+				System.out.println("...Row with string representation \n\t"
+						+ this.toString() + "\nwas selected from base");
 
 			} catch (Exception e) {
 				e.printStackTrace();
