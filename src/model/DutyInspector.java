@@ -332,7 +332,7 @@ public class DutyInspector extends Inspector {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * @return контейнер типа ArrayList в котором содержатся объекты, хранящиеся
 	 *         в таблице protocols базы данных
@@ -344,7 +344,8 @@ public class DutyInspector extends Inspector {
 			Connection conn = this.getConnection();
 			try {
 				PreparedStatement stmt = conn
-						.prepareStatement("select duty_tour_id from duty_tours");
+						.prepareStatement("select duty_tour_id from duty_tours where duty_inspector_id = "
+								+ Integer.toString(this.getBaseId()));
 				ResultSet res = stmt.executeQuery();
 
 				while (res.next()) {
@@ -370,7 +371,6 @@ public class DutyInspector extends Inspector {
 
 		return dutyTours;
 	}
-
 
 	@Override
 	public String toString() {
