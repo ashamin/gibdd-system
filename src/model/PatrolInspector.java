@@ -6,10 +6,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 /**
  * PatrolInspector Класс описывает параметры патрульного инспектора. Помимо
@@ -59,7 +56,6 @@ import java.util.Queue;
  * <li>password - НЕ null и не пустая строка</li>
  * <li>dutyTour - НЕ null</li>
  * <li>coordinates - НЕ null</li>
- * <li>queue - НЕ null</li>
  * </ul>
  * <br/>
  * <br/>
@@ -69,7 +65,7 @@ import java.util.Queue;
  * @author Шамин Антон
  * 
  */
-public class PatrolInspector extends Inspector implements Runnable {
+public class PatrolInspector extends Inspector {
 
 	/**
 	 * Наряд
@@ -82,16 +78,6 @@ public class PatrolInspector extends Inspector implements Runnable {
 	private EarthCoordinates coordinates;
 
 	/**
-	 * Очередь протоколов
-	 */
-	private Queue<Protocol> queue;
-
-	/**
-	 * Работает ли патрульный инспектор?
-	 */
-	private boolean running;
-
-	/**
 	 * Конструктор по умолчанию для класса PatrolInspector. <br/>
 	 * Создает экземпляр класса со стандартными значениями полей “ФИО”,
 	 * “Серия/номер паспорта”, “Адрес”, “Звание”, “Должность”, “Логин”,
@@ -99,9 +85,7 @@ public class PatrolInspector extends Inspector implements Runnable {
 	 */
 	public PatrolInspector() {
 		super();
-		this.queue = new LinkedList<Protocol>();
 		this.coordinates = new EarthCoordinates();
-		this.running = false;
 	}
 
 	/**
@@ -120,9 +104,7 @@ public class PatrolInspector extends Inspector implements Runnable {
 			String rank, String post, String login, String password,
 			EarthCoordinates coordinates, boolean running) {
 		super(name, passportNumber, address, rank, post, login, password);
-		this.queue = new LinkedList<Protocol>();
 		this.coordinates = new EarthCoordinates(coordinates);
-		this.running = running;
 	}
 
 	/**
@@ -134,17 +116,7 @@ public class PatrolInspector extends Inspector implements Runnable {
 	 */
 	public PatrolInspector(PatrolInspector inspector) {
 		super((Inspector) inspector);
-
-		this.queue = new LinkedList<Protocol>();
-		Protocol tmp;
-		Iterator<Protocol> it = inspector.queue.iterator();
-		while (it.hasNext()) {
-			tmp = it.next();
-			this.queue.add(new Protocol(tmp));
-		}
-
 		this.coordinates = new EarthCoordinates(inspector.coordinates);
-		this.running = inspector.running;
 	}
 
 	/**
@@ -198,21 +170,6 @@ public class PatrolInspector extends Inspector implements Runnable {
 	 */
 	public void deleteProtocol(Protocol protocol) {
 		protocol.delete();
-	}
-
-	/**
-	 * Обновляет очередь незаполненных протоколов данного инспектора.<br/>
-	 * Данный метод вызывается, когда стартует Thread содержащий данный объект,
-	 * выполняется пока значение поля running равно true, и завершает свою
-	 * работу, когда значение поля running равно false.<br/>
-	 * Метод в определенные промежутки времени загружает из базы данных
-	 * протоколы (Prolocol), которые должен заполнить данный инспектор и
-	 * добавляет их в очередь (queue), если в очереди их не было.
-	 */
-	@Override
-	public void run() {
-		// TODO implement getting protocols from automatic recorder
-		throw new UnsupportedOperationException("not implemented");
 	}
 
 	/**
@@ -463,26 +420,6 @@ public class PatrolInspector extends Inspector implements Runnable {
 	 */
 	public EarthCoordinates getCoordinates() {
 		return this.coordinates;
-	}
-
-	/**
-	 * Возвращает значение поля running, показывающее работает ли данный
-	 * патрульный инспектор.
-	 * 
-	 * @return
-	 */
-	public boolean isRunning() {
-		return running;
-	}
-
-	/**
-	 * Устанавливает значение поля running, показывающее работает ли данный
-	 * патрульный инспектор.
-	 * 
-	 * @param running
-	 */
-	public void setRunning(boolean running) {
-		this.running = running;
 	}
 
 }
