@@ -150,7 +150,7 @@
 	</div>
 	<%
 		} else {
-
+			response.sendRedirect("login.jsp");
 		}
 	%>
 </body>

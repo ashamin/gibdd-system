@@ -1,5 +1,7 @@
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="model.DutyInspector"%>
 <%@page import="model.Inspector"%>
+<%@page import="java.util.Date"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -33,6 +35,9 @@
 		</table>
 	</div>
 	<br>
+	<%
+		String action = request.getParameter("action");
+	%>
 	<!-- Main div -->
 	<div id="content_middle">
 		<h1 class="title_align">Редактирование информации о наряде</h1>
@@ -69,24 +74,20 @@
 				</tr>
 				<tr>
 					<td>Дата начала наряда:</td>
-					<td><input type="text" class="input_style" name="startDate"></td>
-				</tr>
-				<tr>
-					<td>Дата окончания наряда:</td>
-					<td><input type="text" class="input_style" name="finishDate"></td>
+					<td><input type="text" class="input_style" name="startDate"
+						value="<%=new SimpleDateFormat("yyyy-MM-dd").format(new Date())%>"
+						readonly="readonly"></td>
 				</tr>
 			</table>
 			<p class="title_align">
 				<%
-					if (request.getParameter("id") == null) {
+					if (action == null || action.equals("start")) {
 				%>
 				<input type="button" class="button_style" value="Запустить">
 				<%
-					} else {
+					} else if (action.equals("update")) {
 				%>
-				<input type="button" class="button_style" value="Остановить">
 				<input type="button" class="button_style" value="Обновить">
-				<input type="button" class="button_style" value="Удалить">
 				<%
 					}
 				%>
@@ -97,7 +98,7 @@
 	</div>
 	<%
 		} else {
-
+			response.sendRedirect("login.jsp");
 		}
 	%>
 </body>

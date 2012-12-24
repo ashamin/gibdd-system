@@ -1,3 +1,5 @@
+<%@page import="model.AutomaticRecorder"%>
+<%@page import="model.DutyTour"%>
 <%@page import="model.Violation"%>
 <%@page import="model.Protocol"%>
 <%@page import="model.Vehicle"%>
@@ -120,35 +122,104 @@
 	<br>
 	<!-- Main div -->
 	<div id="content_middle_main">
-		<h1>Наряды</h1>
+		<!-- Current duty tour table -->
+		<h1>Текущий наряд</h1>
+
 		<form>
-			<!-- Table Duty Tours -->
+			<%
+				DutyTour currentDutyTour = (DutyTour) session
+							.getAttribute("current-duty-tour");
+					if (currentDutyTour != null) {
+			%>
 			<table class="formdata" border="1">
 				<tr>
 					<th></th>
-					<th>№</th>
 					<th>Назначенные инспекторы</th>
 					<th>Автоматические регистраторы</th>
 					<th>Дата начала</th>
-					<th>Дата окончания</th>
-					<th>Состояние</th>
 				</tr>
-				<%
-					// TODO: Implement for-loop over all duty tours
-				%>
 				<tr>
 					<td><input type="button" class="button_edit" value="Ред."
-						onclick="location.href='duty-tour-form.jsp?id='"></td>
+						onclick="location.href='duty-tour-form.jsp?action=edit'"></td>
+					<td>
+						<ul>
+							<%
+								for (PatrolInspector patrolInspector : currentDutyTour
+												.getPatrolInspectors()) {
+							%>
+							<li><%=patrolInspector.getName()%></li>
+							<%
+								}
+							%>
+						</ul>
+					</td>
+					<td>
+						<ul>
+							<%
+								for (AutomaticRecorder automaticRecorder : currentDutyTour
+												.getAutomaticRecorders()) {
+							%>
+							<li><%=automaticRecorder.getUID()%></li>
+							<%
+								}
+							%>
+						</ul>
+					</td>
+					<td><%=currentDutyTour.getStartDate()%></td>
 				</tr>
-				<%
-					// End of for-loop
-				%>
 			</table>
 			<p>
-				<input type="button" class="button_style_main_duty_tour_protocol"
-					value="Новый наряд" onclick="location.href='duty-tour-form.jsp'" />
+				<input type="button" value="Остановить наряд"
+					onclick="location.href='duty-tour-form.jsp?action=stop'" />
 			</p>
+			<%
+				} else {
+			%>
+			На данный момент нарядов нет
+			<p>
+				<input type="button" value="Запустить наряд"
+					onclick="location.href='duty-tour-form.jsp?action=start'" />
+			</p>
+			<%
+				}
+			%>
 		</form>
+		
+		<h1>Прошлые наряды</h1>
+		<!-- Table Duty Tours -->
+		<table class="formdata" border="1">
+			<tr>
+				<th>№</th>
+				<th>Назначенные инспекторы</th>
+				<th>Дата начала</th>
+				<th>Дата окончания</th>
+			</tr>
+			<%
+				int i = 0;
+					for (DutyTour dutyTour : dutyInspector.selectDutyTours()) {
+			%>
+			<tr>
+				<td><%=++i%></td>
+				<td>
+					<ul>
+						<%
+							for (PatrolInspector patrolInspector : dutyTour
+											.getPatrolInspectors()) {
+						%>
+						<li><%=patrolInspector.getName()%></li>
+						<%
+							}
+						%>
+					</ul>
+				</td>
+				<td><%=dutyTour.getStartDate()%></td>
+				<td><%=dutyTour.getFinishDate()%></td>
+			</tr>
+			<%
+				}
+			%>
+		</table>
+		<br />
 	</div>
 	<%
 		} else if (inspector instanceof PatrolInspector) {
@@ -190,8 +261,7 @@
 					<th>Состояние</th>
 				</tr>
 				<%
-					// TODO: Implement for-loop over all protocols
-						int i = 0;
+					int i = 0;
 						for (Protocol protocol : patrolInspector.selectProtocols()) {
 							Human human = protocol.getHuman();
 							Vehicle vehicle = protocol.getVehicle();
@@ -212,7 +282,7 @@
 					<td>?</td>
 				</tr>
 				<%
-					}// End of for-loop
+					}
 				%>
 			</table>
 			<p>
@@ -284,7 +354,7 @@
 							.getLeaveDate().toString()%></td>
 				</tr>
 				<%
-					}// End of for-loop
+					}
 				%>
 			</table>
 			<p>
