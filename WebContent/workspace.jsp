@@ -41,7 +41,7 @@
 		<table border="0" width="100%">
 			<tr>
 				<td width="10%">Пользователь:</td>
-				<td width="30%"><%=driverLicenseInspector.getName()%></td>
+				<td width="40%"><%=driverLicenseInspector.getName()%></td>
 				<td align="right"><a href="logout" class="href_style">Выход
 						из системы</a></td>
 			</tr>
@@ -109,7 +109,7 @@
 		<table border="0" width="100%">
 			<tr>
 				<td width="10%">Пользователь:</td>
-				<td width="30%"><%=dutyInspector.getName()%></td>
+				<td width="40%"><%=dutyInspector.getName()%></td>
 				<td align="right"><a href="logout" class="href_style">Выход
 						из системы</a></td>
 			</tr>
@@ -230,7 +230,7 @@
 		<table border="0" width="100%">
 			<tr>
 				<td width="10%">Пользователь:</td>
-				<td width="30%"><%=patrolInspector.getName()%></td>
+				<td width="40%"><%=patrolInspector.getName()%></td>
 				<td align="right"><a href="logout" class="href_style">Выход
 						из системы</a></td>
 			</tr>
@@ -300,7 +300,7 @@
 		<table border="0" width="100%">
 			<tr>
 				<td width="10%">Пользователь:</td>
-				<td width="30%"><%=vehicleInspector.getName()%></td>
+				<td width="40%"><%=vehicleInspector.getName()%></td>
 				<td align="right"><a href="logout" class="href_style">Выход
 						из системы</a></td>
 			</tr>
