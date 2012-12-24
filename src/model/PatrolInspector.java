@@ -40,7 +40,6 @@ import java.util.List;
  * <li>A(password) = Пароль</li>
  * <li>A(dutyTour) = Ссылка на наряд</li>
  * <li>A(coordinates) = Координаты</li>
- * <li>A(queue) = Очередь протоколов</li>
  * </ul>
  * <br/>
  * <br/>
