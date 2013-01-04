@@ -57,6 +57,7 @@ CREATE TABLE protocols
   patrol_inspector_id Int UNSIGNED,
   vehicle_id Int UNSIGNED,
   human_id Int UNSIGNED,
+  filled Boolean,
  PRIMARY KEY (protocol_id),
  UNIQUE protocol_id (protocol_id)
 );
@@ -197,7 +198,8 @@ CREATE TABLE brands
   brand_id Int UNSIGNED NOT NULL AUTO_INCREMENT,
   brand Varchar(50) NOT NULL,
  PRIMARY KEY (brand_id),
- UNIQUE brand_id (brand_id)
+ UNIQUE brand_id (brand_id),
+ UNIQUE brand (brand)
 );
 
 -- Table duties

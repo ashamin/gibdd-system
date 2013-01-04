@@ -79,6 +79,11 @@ public class Protocol extends DBObject {
 	private PatrolInspector patrolInspector;
 
 	/**
+	 * Заполнен или не заполнен протокол
+	 */
+	private boolean filled;
+
+	/**
 	 * Конструктор по умолчанию для класса Protocol. <br/>
 	 * Создает экземпляр класса со стандартными значениями полей класса
 	 * "Протокол".
@@ -89,6 +94,7 @@ public class Protocol extends DBObject {
 		this.date = Date.valueOf("1900-01-01");
 		this.vehicle = new Vehicle();
 		this.patrolInspector = new PatrolInspector();
+		this.filled = false;
 	}
 
 	/**
@@ -107,6 +113,7 @@ public class Protocol extends DBObject {
 		this.date = new Date(date.getTime());
 		this.vehicle = new Vehicle(vehicle);
 		this.patrolInspector = new PatrolInspector(patrolInspector);
+		this.filled = true;
 	}
 
 	/**
@@ -123,6 +130,7 @@ public class Protocol extends DBObject {
 		this.vehicle = new Vehicle(protocol.vehicle);
 		this.date = new Date(protocol.date.getTime());
 		this.patrolInspector = new PatrolInspector(protocol.patrolInspector);
+		this.filled = protocol.filled;
 	}
 
 	/**
@@ -136,14 +144,15 @@ public class Protocol extends DBObject {
 				PreparedStatement stmt = conn
 						.prepareStatement(
 								"insert into gibdd_system_db.protocols (protocol_id, date, "
-										+ "violation_id, patrol_inspector_id, vehicle_id, human_id) "
-										+ "values (default, ?, ?, ?, ?, ?)",
+										+ "violation_id, patrol_inspector_id, vehicle_id, human_id, filled) "
+										+ "values (default, ?, ?, ?, ?, ?, ?)",
 								Statement.RETURN_GENERATED_KEYS);
 				stmt.setDate(1, this.date);
 				stmt.setInt(2, this.violation.getId());
 				stmt.setInt(3, this.patrolInspector.getBaseId());
 				stmt.setInt(4, this.vehicle.getId());
 				stmt.setInt(5, this.human.getId());
+				stmt.setBoolean(6, this.filled);
 
 				stmt.executeUpdate();
 
@@ -179,7 +188,8 @@ public class Protocol extends DBObject {
 								+ "violation_id=?, "
 								+ "vehicle_id=?, "
 								+ "patrol_inspector_id=?, "
-								+ "human_id=? "
+								+ "human_id=?, "
+								+ "filled=? "
 								+ "where protocol_id = "
 								+ Integer.toString(this.id));
 				stmt.setDate(1, this.date);
@@ -187,6 +197,7 @@ public class Protocol extends DBObject {
 				stmt.setInt(3, this.vehicle.getId());
 				stmt.setInt(4, this.patrolInspector.getBaseId());
 				stmt.setInt(5, this.human.getId());
+				stmt.setBoolean(6, this.filled);
 
 				stmt.executeUpdate();
 
@@ -236,7 +247,8 @@ public class Protocol extends DBObject {
 			try {
 				PreparedStatement stmt = conn
 						.prepareStatement("select protocol_id, date, "
-								+ "violation_id, patrol_inspectors.inspector_id, vehicle_id, human_id "
+								+ "violation_id, patrol_inspectors.inspector_id, vehicle_id, human_id, "
+								+ "filled "
 								+ "from gibdd_system_db.protocols, gibdd_system_db.patrol_inspectors "
 								+ "where protocol_id = "
 								+ Integer.toString(id)
@@ -251,6 +263,7 @@ public class Protocol extends DBObject {
 					this.patrolInspector.select(res.getInt(4));
 					this.vehicle.select(res.getInt(5));
 					this.human.select(res.getInt(6));
+					this.filled = res.getBoolean(7);
 				}
 
 				System.out.println("...Row with string representation \n\t"
@@ -266,7 +279,7 @@ public class Protocol extends DBObject {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -276,7 +289,8 @@ public class Protocol extends DBObject {
 		sb.append("violation = " + this.violation.toString() + ", ");
 		sb.append("patrol_inspector = " + this.patrolInspector.toString()
 				+ ", ");
-		sb.append("vehicle = " + this.vehicle);
+		sb.append("vehicle = " + this.vehicle + ", ");
+		sb.append("filled = " + this.filled);
 		return sb.toString();
 	}
 
@@ -368,6 +382,24 @@ public class Protocol extends DBObject {
 	 */
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+	/**
+	 * 
+	 * @return заполнен или не заполнен протокол
+	 */
+	public boolean getFilled() {
+		return this.filled;
+	}
+
+	/**
+	 * Устанавливает состояние протокола в заполненное или незаполненное.
+	 * 
+	 * @param par
+	 *            состояние протокола
+	 */
+	public void setFilled(boolean par) {
+		this.filled = par;
 	}
 
 }
