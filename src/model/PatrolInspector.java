@@ -172,6 +172,52 @@ public class PatrolInspector extends Inspector {
 	}
 
 	/**
+	 * 
+	 * @param vehicle
+	 *            транспортное средство документы которого необходимо получить
+	 * @return
+	 */
+	public VehicleRegistrationCertificate getActiveCertificate(Vehicle vehicle) {
+		VehicleRegistrationCertificate tmp = new VehicleRegistrationCertificate();
+		VehicleRegistrationCertificate ret = new VehicleRegistrationCertificate();
+		try {
+			Connection conn = this.getConnection();
+			try {
+				PreparedStatement stmt = conn
+						.prepareStatement("select vehicle_registration_certificate_id "
+								+ "from gibdd_system_db.vehicle_registration_certificates "
+								+ "where vehicle_id = ?");
+
+				stmt.setInt(1, vehicle.id);
+				
+				ResultSet res = stmt.executeQuery();
+
+				res.next();
+				ret.select(res.getInt(1));
+				
+				while(res.next()){
+					tmp.select(res.getInt(1));
+					if (tmp.getLeaveDate().after(ret.getLeaveDate()))
+						ret = new VehicleRegistrationCertificate(tmp);
+				}
+
+				System.out.println("...Row with string representation \n\t"
+						+ this.toString() + "\nwas selected from base");
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return ret;
+	}
+
+	/**
 	 * Переопределяются методы базового класса
 	 */
 	@Override
