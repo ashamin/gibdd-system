@@ -313,7 +313,7 @@ public class Vehicle extends DBObject {
 
 		return brands;
 	}
-
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

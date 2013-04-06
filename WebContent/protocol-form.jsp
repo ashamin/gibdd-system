@@ -2,6 +2,10 @@
 <%@page import="model.Protocol"%>
 <%@page import="model.PatrolInspector"%>
 <%@page import="model.Inspector"%>
+<%@page import="model.Vehicle"%>
+<%@page import="java.util.HashSet"%>
+<%@page import="java.util.Iterator"%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -12,6 +16,15 @@
 	инспектора</title>
 <link rel="stylesheet" type="text/css" href="style.css" />
 <body>
+	<%!public Protocol protocol;
+
+	/**
+	 * Method for deleting current protocol.
+	 */
+	public void deleteProtocol() {
+		protocol.delete();
+	}%>
+
 	<%
 		Inspector inspector = (Inspector) session.getAttribute("inspector");
 
@@ -38,7 +51,7 @@
 	<div id="content_middle">
 		<h1 class="title_align">Редактирование информации о протоколе</h1>
 		<%
-			Protocol protocol = new Protocol();
+			protocol = new Protocol();
 				if (request.getParameter("id") != null) {
 					int id = DBObject.UNDEFINED_ID;
 
@@ -50,7 +63,7 @@
 					protocol.select(id);
 				}
 		%>
-		<form>
+		<form action="protocolFunc">
 			<table>
 				<tr>
 					<td class="title_style"><b>Информация о человеке</b></td>
@@ -68,7 +81,7 @@
 				</tr>
 				<tr>
 					<td>Адрес:</td>
-					<td><textarea name="adress" class="textarea_style" cols="34"
+					<td><textarea name="address" class="textarea_style" cols="34"
 							rows="3"><%=protocol.getHuman().getAddress()%></textarea></td>
 				</tr>
 				<tr>
@@ -113,10 +126,22 @@
 					<td><select name="brand" class="select_style">
 							<%
 								// TODO: Implement for-loop over all brands
+								HashSet<String> brands = (HashSet<String>)Vehicle.selectBrands();
+								
+								Iterator<String> it = brands.iterator();
+								String str;
+								int i = 0;
+										
+								while(it.hasNext()){
+									str = it.next();
+
 							%>
-							<option value=""></option>
+							<option value="<%=i%>"><%= str%></option>
+
 							<%
 								// End of for-loop
+								i++;
+								}
 							%>
 					</select></td>
 				</tr>
@@ -133,27 +158,34 @@
 					<td><input type="text" class="input_style" name="date"
 						value="<%=protocol.getDate().toString()%>"></td>
 				</tr>
-				<tr>
-					<td>Регистрационный номер:</td>
-					<td><input type="text" class="input_style"
-						name="registrationNumber" value="?"></td>
-				</tr>
+<!-- 				<tr> -->
+<!-- 					<td>Регистрационный номер:</td> -->
+<!-- 					<td><input type="text" class="input_style" -->
+<!-- 						name="registrationNumber" value="?"></td> -->
+<!-- 				</tr> -->
 			</table>
+			<input type="hidden" name="protocol_id" value="<%=protocol.getId()%>" />
+			<input type="hidden" name="inspector_id" value="<%=inspector.getId()%>" />
 			<p class="title_align">
 				<%
 					if (protocol.getId() != DBObject.UNDEFINED_ID) {
 				%>
-				<input type="button" class="button_style" value="Обновить" /> <input
-					type="button" class="button_style" value="Удалить" />
+
+
+				<input type="submit" class="button_style" value="Обновить"
+					name="refreshProtocol" /> <input type="submit"
+					class="button_style" name="deleteProtocol" value="Удалить" />
 				<%
 					} else {
 				%>
-				<input type="button" class="button_style" value="Сохранить" />
+				<input type="submit" class="button_style" value="Сохранить"
+					name="saveProtocol" />
 				<%
 					}
 				%>
-				<input type="button" class="button_style" value="Назад"
-					onclick="location.href='workspace.jsp'" />
+				<input type="submit" class="button_style" value="Назад"
+					name="backProtocol" />
+				<!-- 					onclick="location.href='workspace.jsp'" /> -->
 			</p>
 		</form>
 	</div>
